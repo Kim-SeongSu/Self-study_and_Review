@@ -1,4 +1,4 @@
 N = int(input())
-arr = [map(int,input().split())]
-max_score = arr.max()
-new_score = 
+arr = list(map(int,input().split()))
+max_score = max(arr)
+print(sum(x / max_score for x in arr)/N*100)
