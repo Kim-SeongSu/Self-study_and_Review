@@ -1,9 +1,4 @@
-S = input().lower()
-result ={}
-alphbet = [chr(x) for x in range(97, 123)]
-for i in alphbet:
-    if i in S:
-        result[i] = S.count(i)
-    else:
-        pass
-print(k.upper() for k,v in result.items() if v == str(max(result.values())))
+S = input().upper()
+results = {i: S.count(i) for i in set(S)}
+result = [i for i in set(S) if S.count(i) == max(list(results.values()))]
+print(result[0] if len(result) == 1 else '?')
