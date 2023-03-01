@@ -6,7 +6,4 @@ for i in dials:
     dial.update(i)
 
 S = input()
-result = 0
-for i in S:
-    result += dial.get(i)+1
-print(result)
+print(sum(dial.get(i)+1 for i in S))
