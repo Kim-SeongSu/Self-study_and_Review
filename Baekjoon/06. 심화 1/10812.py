@@ -3,13 +3,18 @@ basket = list(range(1,N+1))
 
 for _ in range(M):
     i,j,k = map(int,input().split())
-    i,j,k = i-1,j-1,k-1
 
-    cycle = basket[i:j+1]
+    # wile문 사용
+    # cycle = basket[i-1:j]
 
-    temp = cycle[i:k]
-    cycle[i:k+1] = cycle[k:j+1]
-    cycle[k+1:j+1] = temp
+    # while cycle.index(basket[k-1]) != 0:
+    #     cycle.append(cycle[0])
+    #     del cycle[0]
 
-    basket[i:j+1] = cycle
-print(basket)
+    # basket[i-1:j] = cycle
+
+
+    #슬라이싱 사용
+    basket[i-1:j] = basket[k-1:j] + basket[i-1:k-1]
+
+print(*basket)
