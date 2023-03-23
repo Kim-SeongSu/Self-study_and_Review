@@ -3,7 +3,6 @@
 
 <p>
 - Python <br>
-- SQL <br>
-- Linux <br>
-- Pytorch
+- JAVA <br>
+- C++
 </p>
