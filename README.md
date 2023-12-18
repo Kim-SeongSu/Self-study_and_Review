@@ -4,5 +4,6 @@
 <p>
 - Python <br>
 - JAVA <br>
-- C++
+- C++ <br>
+- MySQL
 </p>
