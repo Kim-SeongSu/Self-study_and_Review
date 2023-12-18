@@ -1,15 +1,7 @@
 # 새로 배운 MySQL 문법 정리 
 
-<p>
-- Python <br>
-- JAVA <br>
-- C++ <br>
-- MySQL
-
-
-
 - <span style="color:gold"> 정렬하기 </span><br>
-ORDER BY ASC(오름차순,기본값) 또는  DESC(내림차순)
+ORDER BY ASC(오름차순,기본값) 또는  DESC(내림차순) <br>
 <span style="color:green"> *여러 조건으로 정렬할 경우, 우선 적용할 컬럼 순서로 기입 </span><br>
 
 - <span style="color:gold"> 빈값찾기 </span><br>
@@ -29,4 +21,3 @@ DISTINCT 컬럼 <br>
 
 - <span style="color:gold">  GROUP BY 추가 조건 </span><br>
 GROUP BY 컬럼 HAVING 조건<br>
-</p>
