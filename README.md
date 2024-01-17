@@ -1,9 +1,12 @@
 # Self-study & Review
-배운 내용을 정리하고 복습해보는 곳 (Organize and review what you've learned)
+배운 내용을 정리하는 디렉토리입니다.
 
-<p>
-- Python <br>
-- JAVA <br>
-- C++ <br>
+- Python
+  - Package_Module
 - MySQL
-</p>
+- Linux
+  - Linux 기본 명령어
+  - shell script
+- Network
+- Java
+- C++
