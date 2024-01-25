@@ -37,10 +37,27 @@
 
     - 앞으로가기 :ㅤㅤ`Ctrl + r`
 
+<br>
+
+3. `검색` 관련 단축키
+   
+    - 줄 수 표시:ㅤㅤ`:set nu`
+
+    - 커서 위/아래로 검색어 찾기:ㅤㅤ`:/검색어`ㅤ/ㅤ`:/검색어` 
+
+    - 다음/이전 검색어 찾기 :ㅤㅤ`n`ㅤ/ㅤ`N`
+
 
 </details><br><br>
 
-## 기본 명령어
+
+
+
+
+
+
+
+## 리눅스 내부 명령어
 > `man`      ( manual )
 <p>: 궁금한 명령어 또는 파일에 대한 옵션 및 사용법을 출력</p>
 
@@ -73,7 +90,7 @@ $ man [options] [section] [명령어 or 파일]
 
 
 
->  `pwd` ( print name of current/working directory )
+>  `pwd` ( print working directory )
 <p>: 현재 위치한 디렉토리의 절대 경로를 출력</p>
 
 ``` Linux
@@ -119,7 +136,7 @@ $ cd [이동할 경로]
 
 
 
-> `ls`  ( list )
+> `ls`  ( list segments )
 <p>: 현재 위치한 디렉토리의 내용(디렉토리, 파일 등)을 출력</p>
 
 ``` Linux
@@ -357,6 +374,101 @@ $ more [options] [파일]
 ```
 
 </details><br><br><br>
+
+
+> `touch`  ( touch )
+<p>: 빈 파일을 생성하거나 파일의 날짜와 시간을 수정</p>
+
+``` Linux
+$ touch [options] [파일]
+```
+
+<details><summary>접기/펼치기</summary>
+
+``` Linux
+  
+* 사용법
+  $ touch [생성 or 수정 파일1] ... [생성 or 수정 파일n] : n개 파일 생성 or 수정
+  $ touch * : 현 위치의 모든 파일 수정
+  $ touch *.txt : txt로 끝나는 모든 파일 수정
+
+* 주요 옵션
+  -m : 파일의 수정 시간과 변경 시간을 현재 시간으로 수정
+  -t : 파일의 수정시간과 접근 시간을 지정한 시간으로, 변경 시간을 현재 시간으로 수정
+
+```
+
+</details><br><br><br>
+
+
+
+> `echo`  ( echo )
+<p>: 주어진 문자열을 화면에 출력</p>
+
+``` Linux
+$ touch [options] [문자열]
+```
+
+<details><summary>접기/펼치기</summary>
+
+``` Linux
+* 사용 예시
+  $ echo apple is red.
+  >> apple is red.
+
+  $ echo "apple is (red or green)."ㅤㅤㅤㅤ* 특수문자 또는 매우 긴 문자열의 경우 큰따옴표(" ") 사용
+  >> apple is (red or green).
+
+
+* 사용법
+  $ echo "내용" > [파일명] : 입력 내용을 해당 파일 생성 또는 덮어쓰기
+  $ echo "내용" >> [파일명] : 입력 내용을 해당 파일 생성 또는 이어쓰기
+
+```
+
+</details><br><br><br>
+
+
+
+> `alias`  ( 별칭 )
+<p>: 사용자가 명령어를 다른 이름으로 바꿔 사용할 수 있게 이름 변경</p>
+
+``` Linux
+$ alias [입력 설정]
+```
+
+<details><summary>접기/펼치기</summary>
+
+``` Linux
+  
+* 사용법
+  $ alias : 명령어 별칭 확인
+  $ alias [지정할 명령어 별칭]='명령어' : 명령어 별칭 등록
+  $ unalias [지정했던 명령어 별칭]: 명령어 별칭 해제
+
+```
+<br>
+
+* alias 별칭 영구 등록하는 방법 <br>
+ㅤ`ls -al` 로 `./bashrc 파일`을 찾아 아래 내용 추가 후 `source ~/.bashrc`명령어로 동기화 해주기
+
+``` Linux
+# .bashrc 
+alias la='ls -al' 
+# Source global definitions 
+if [ -f /etc/bashrc ]; then
+. /etc/bashrc 
+fi 
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature: 
+# export SYSTEMD_PAGER= 
+# User specific aliases and functions ~
+```
+
+</details><br><br><br>
+
+
+
 
 
 
