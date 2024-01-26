@@ -469,7 +469,82 @@ fi
 
 
 
+> `chmod`  ( change mode )
+<p>: 디렉토리나 파일의 시스템 모드를 변경</p>
 
+``` Linux
+$ chmod [options] [mode] [디렉토리 or 파일]
+```
+<details><summary>접기/펼치기</summary>
+
+``` Linux
+  
+* 사용법
+  $ chmod [숫자 표기법] [디렉토리 또는 파일] :
+     ex) chmod 755 test_01.txt
+  $ chmod [문자 표기법] [디렉토리 또는 파일] :
+     ex) chmod g+wr test_02.txt
+
+```
+
+<details><summary>chmod 숫자 표기법 설명</summary>
+    
+![image](https://github.com/Kim-SeongSu/Self-study_and_Review/assets/104110605/5ce5fa06-de87-47e2-bccb-faeaa66dc57e)
+
+```linux
+$ chmod 754 test_01.txt
+
+파일 소유 사용자 권한: 7 = 4 + 2 + 1
+파일 소유 그룹 권한 : 5 = 4 + 1
+그 외 사용자 권한 : 4 = 4
+```
+
+
+</details>
+
+<details><summary>chmod 문자 표기법 설명</summary>
+    
+![image](https://github.com/Kim-SeongSu/Self-study_and_Review/assets/104110605/82e521ae-2c26-482d-bc57-06c6ecd0129f)
+
+
+```linux
+$ chmod u+rwx test_01.txt
+  : 파일 소유 사용자에게 읽기,쓰기,실행 권한 부여
+
+$ chmod g-w test_01.txt
+  : 파일 소유 그룹에게 쓰기 권한 박탈
+
+$ chmod a+r test_01.txt
+  : 모든 사용자에게 읽기 권한 부여
+
+$ chmod -R a-r,a+x test_01.txt
+  : 현 디렉토리의 모든 파일의 모든 사용자에게 읽기 권한 박탈 및 실행 권한 부여
+```
+
+
+</details>
+
+<details><summary>파일 상세 정보 설명</summary>
+
+![image](https://github.com/Kim-SeongSu/Self-study_and_Review/assets/104110605/66566c7d-1b00-488b-aa77-95ddd123e086)
+
+
+- `파일 권한`
+
+    - `-` (일반 파일) : 각종 텍스트 파일, 실행 파일, 이미지 파일 등
+    - `d` (디렉토리) : 폴더 같은 개념 (리눅스에서는 폴더도 파일로 취급)
+    - `l` (링크 파일) : 소프트 링크(심볼릭 링크, '바로가기'같은 역할)
+    - `b` (블록형 장치파일) : ex) /dev/sda (디스크 파일)       (sda1,sda2,sdb,sdc,...등의 디스크 파티션도 마찬가지) 
+    - `c` (문자형 파일) : ex) /dev/console (입출력 콘솔 파일)
+    - `p` (파이프 파일) : ex) /run/systemd/initctl/fifo (파이프 파일)
+<br>ㅤㅤㅤㅤㅤㅤㅤㅤ* 파이프: '파일1'의 결과를 '파일2'로 바로 적용시키는 것    ('ls | grep c'에서의 |가 파이프)
+    - `s` (소켓 파일) : ex) /dev/log (소켓 파일)
+<br>ㅤㅤ* 하드디스크,USB 같은 장치도 파일로 취급함!    (장치 파일은 /dev 디렉토리에 들어있음)
+
+
+</details><br>
+
+</details><br><br><br>
 
 
 
