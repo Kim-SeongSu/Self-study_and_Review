@@ -1,3 +1,9 @@
+<div align='center'>
+<img src="https://capsule-render.vercel.app/api?type=transparent&color=timeAuto&height=100&section=header&fontSize=50&descSize=20&descAlign=60&descAlignY=83&text=SQL%20Study&desc=Basic%20grammar"/>
+</div>
+<br><br>
+
+
 # SQL (Structured Query Language) 문법 정리 
 - SQL은 관계형 데이터 모델을 따르는 DBMS의  표준 데이터베이스 언어
 - 관계 대수를 기초로 만드러진 DB관련 명령어 형식
