@@ -1,7 +1,7 @@
 ## vi 명령어
 > `vi` (또는 `vim`)에서 사용하는 단축키 정리
 
-<details><summary>접기/펼치기</summary>
+<details><summary>자세히 보기</summary>
 
 - 모든 단축키는 `Esc 키`를 누른 `표준모드 진입 상태`에서 진행
 
@@ -198,7 +198,19 @@ $ cat [options] [파일1] [파일2]...[파일n]
 
 <details><summary>접기/펼치기</summary>
 
-- 리다이렉션
+``` Linux
+* 주요 옵션
+  -n : 줄 번호를 화면 왼쪽에 나타냄(비어있는 행도 포함 / -b는 비어있는 행 제외)
+  -s : 두 줄 이상의 연속되는 빈 행을 1줄로 출력
+  -A : -vET 옵션과 같은 효과
+       -v : tab과 행 바꿈 문자(\r , ^M)를 제외한 제어 문자를 ^형태로 출력
+       -E : 행마다 끝에 $ 출력
+       -T : tab 문자를 출력
+```
+</details>
+
+<details><summary>IO Redirection</summary>
+    
 ![redirection](https://github.com/Kim-SeongSu/Self-study_and_Review/assets/104110605/8a44696d-84e2-4e00-b68c-43b33b81b29b)
 
 ``` Linux
@@ -233,19 +245,36 @@ $ cat [options] [파일1] [파일2]...[파일n]
   $ cat [파일1] [파일2] >> [파일3]
     : 파일3에 파일1과 파일2를 이어붙이기 (3 1 2 순)
 
----------------------------------------------------------------------------------------------------
-
-* 주요 옵션
-  -n : 줄 번호를 화면 왼쪽에 나타냄(비어있는 행도 포함 / -b는 비어있는 행 제외)
-  -s : 두 줄 이상의 연속되는 빈 행을 1줄로 출력
-  -A : -vET 옵션과 같은 효과
-       -v : tab과 행 바꿈 문자(\r , ^M)를 제외한 제어 문자를 ^형태로 출력
-       -E : 행마다 끝에 $ 출력
-       -T : tab 문자를 출력
 ```
+<br>
++ 응용 하기
+<br><br>
+
+<p align="center" width="100%">
+    <img width="40%" height="250" src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FMvS0h%2FbtqUeVRgYk4%2Fx0ayD6315BcJ3flKLkGSFk%2Fimg.png">
+</p>
+
+| File | File Descriptor |
+|:--:|:--:|
+| **STDIN** (standard input) | **0** |
+| **STDOUT** (standard output) | **1** |
+| **STDERR** (standard error) | **2** |
+
+``` Linux
+# 현 디렉토리의 파일명을 리다이렉션을 사용해 저장 
+  $ ll -al > dirctory_file_list.txt
+
+# >는 사실 1> (1은 STDOUT; 즉, ll -al 명령어를 통해 터미널에 출력되는 내용)
+  $ ll -al 1> dirctory_file_list.txt
+
+# 이러한 이유로 error를 입력할 때는 2(STDERR)를 입력하면 된다.
+  $ cat not_exist_file.txt 2> dirctory_file_list.txt
+```
+[참고 자료](https://www.opentutorials.org/course/2598/14199)
+
+
 
 </details><br><br><br>
-
 
 
 > `mv`  ( move )
