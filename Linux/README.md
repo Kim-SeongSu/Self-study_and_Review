@@ -1,3 +1,8 @@
+<div align='center'>
+<img src="https://capsule-render.vercel.app/api?type=transparent&color=timeAuto&height=100&section=header&fontSize=50&descAlign=57&descSize=20&descAlignY=83&text=Linux%20Study&desc=Basic%20command"/>
+
+</div>
+
 ## vi 명령어
 > `vi` (또는 `vim`)에서 사용하는 단축키 정리
 
