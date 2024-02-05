@@ -522,8 +522,9 @@ $ chmod [options] [mode] [디렉토리 or 파일]
 ```
 
 <details><summary>chmod 숫자 표기법 설명</summary>
+<div align='center'>
     
-![image](https://github.com/Kim-SeongSu/Self-study_and_Review/assets/104110605/5ce5fa06-de87-47e2-bccb-faeaa66dc57e)
+![image](https://github.com/Kim-SeongSu/Self-study_and_Review/assets/104110605/5ce5fa06-de87-47e2-bccb-faeaa66dc57e)</div>
 
 ```linux
 $ chmod 754 test_01.txt
@@ -532,14 +533,12 @@ $ chmod 754 test_01.txt
 파일 소유 그룹 권한 : 5 = 4 + 1
 그 외 사용자 권한 : 4 = 4
 ```
-
-
 </details>
 
 <details><summary>chmod 문자 표기법 설명</summary>
-    
-![image](https://github.com/Kim-SeongSu/Self-study_and_Review/assets/104110605/82e521ae-2c26-482d-bc57-06c6ecd0129f)
-
+    <div align='center'>
+        
+![image](https://github.com/Kim-SeongSu/Self-study_and_Review/assets/104110605/82e521ae-2c26-482d-bc57-06c6ecd0129f)</div>
 
 ```linux
 $ chmod u+rwx test_01.txt
@@ -559,9 +558,9 @@ $ chmod -R a-r,a+x test_01.txt
 </details>
 
 <details><summary>파일 상세 정보 설명</summary>
-
-![image](https://github.com/Kim-SeongSu/Self-study_and_Review/assets/104110605/66566c7d-1b00-488b-aa77-95ddd123e086)
-
+<div align='center'>
+    
+![image](https://github.com/Kim-SeongSu/Self-study_and_Review/assets/104110605/66566c7d-1b00-488b-aa77-95ddd123e086)</div>
 
 - `파일 권한`
 
@@ -581,6 +580,64 @@ $ chmod -R a-r,a+x test_01.txt
 </details><br><br><br>
 
 
+
+> `crontab`  ( cron table )
+<p>: job 목록 및 cron daemon에 대한 다른 명령들이 보관 (cron: 유닉스 계열 컴퓨터 운영 체제의 시간 기반 잡 스케줄러)</p>
+
+``` Linux
+$ crontab [options]
+```
+
+<details><summary>접기/펼치기</summary>
+
+``` Linux
+* 사용 예시
+# 현재 시간을 알려주는 명령어 date를 1분에 한번씩 date.log에 입력하고자 할 때,
+$ crontab -e 명령어로 설정파일에 들어간다.
+
+<crontab 설정 파일>
+     # ┌───────────── min (0 - 59)
+     # │ ┌────────────── hour (0 - 23)
+     # │ │ ┌─────────────── day of month (1 - 31)
+     # │ │ │ ┌──────────────── month (1 - 12)
+     # │ │ │ │ ┌───────────────── day of week (0 - 6) (0 to 6 are Sunday to Saturday, or use names; 7 is Sunday, the same as 0)
+     # │ │ │ │ │
+     # │ │ │ │ │
+     # * * * * *  command to execute
+
+* * * * * date >> /root/test/date.log 2>&1          # date 명령어를 실행했을 때, 정상적인 경우는 /root/test/date.log 파일에 붙여쓰기를
+                                                      오류가 발생한 경우는 표준출력으로 오류 내용을 출력
+
+
+# 저장하고 나온 뒤
+$ service crond start 명령어로 실행
+$ tail -f /root/test/date.log로 확인
+
+
+
+
+* 주요 옵션
+  -e : crontab 설정할 수 있는 에디터 화면 출력
+  -l : 현재 크론탭 작업 목록 확인
+  -r : 현재 설정된 크론탭 작업 모두 제거
+```
+
+* cron tab 작업 예시
+
+<div align='center'>
+  
+| 예제 | 설명 |
+|:--:|:--:|
+|* * * * * /home/test.sh| 매분 마다 /home/test.sh 실행|
+|30 1 * * 0 /home/test.sh| 매주 일요일 1시 30분 마다 /home/test.sh 실행|
+|0 0,12 * * * /home/test.sh| 매일 자정, 정오 마다 /home/test.sh 실행|
+|* */1 * * * /home/test.sh| 1시간 마다 /home/test.sh 실행|
+|0-30 0 * * * /home/test.sh| 매일 자정 0~30분 동안 /home/test.sh 실행|
+
+</div>
+
+
+</details><br><br><br>
 
 
 
