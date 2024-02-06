@@ -375,112 +375,268 @@ REVOKE ALL ON *.* FROM 'root'@localhost;
 
 
 
-
-
-
-
 ## 3. SQL 함수
+
+- 다양한 함수 정리
+
 <details><summary>ㅤ</summary>
 <br>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--
-> **``**  (  **데이터 삽입** )
-<p>: </p>
+> **`ORDER BY`**
+<p>: 정렬하기</p>
 
 ```MySQL
-#    [테이블명][DB명][필드명]
-
+ORDER BY ASC(오름차순,기본값) 또는  DESC(내림차순)
+   * 여러 조건으로 정렬할 경우, 우선 적용할 컬럼 순서로 기입
 ```
 
 <details><summary>예시 보기</summary>
 
 ``` MySQL
-
+SELECT P.PRODUCT_CODE, P.PRICE*SUM(O.SALES_AMOUNT) AS SALES
+FROM PRODUCT P
+    INNER JOIN OFFLINE_SALE O
+    ON P.PRODUCT_ID = O.PRODUCT_ID
+GROUP BY PRODUCT_CODE
+ORDER BY SALES DESC, PRODUCT_CODE
 ```
-[ 출력결과 ]
-|ID|Name|ReserveDate|RoomNum|
-|--|--|--|--|
-|1|이순신|2016-02-16|1108|
-|3|김유신|NULL|NULL|
+</details><br><br><br>
 
-[참고 링크]()
+
+> **`GROUP BY`**
+<p>: 그룹화 하기</p>
+
+```MySQL
+GROUP BY [필드명]  HAVING [조건]
+```
+
+<details><summary>예시 보기</summary>
+
+``` MySQL
+SELECT ANIMAL_TYPE, COUNT(ANIMAL_TYPE) as 'count' 
+FROM ANIMAL_INS
+/*
+# 방법1
+ WHERE ANIMAL_TYPE IN ('Cat', 'Dog')
+*/
+
+# 방법 2
+WHERE ANIMAL_TYPE = 'Cat' OR ANIMAL_TYPE = 'Dog'
+GROUP BY ANIMAL_TYPE 
+ORDER BY ANIMAL_TYPE
+```
+</details><br><br><br>
+
+
+> **`DISTINCT`**
+<p>: 중복값 제외</p>
+
+```MySQL
+DISTINCT [필드명] 
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+SELECT COUNT(DISTINCT NAME) AS CNT FROM ANIMAL_INS WHERE NOT ISNULL(NAME)
+```
+</details><br><br><br>
+
+
+> **`LIMIT`**
+<p>: 상위 n개 값 추출</p>
+
+```MySQL
+LIMIT [n]
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+SELECT NAME FROM ANIMAL_INS ORDER BY DATETIME LIMIT 1
+```
+</details><br><br><br>
+
+
+> **`AVG`**
+<p>: 평균값 구하기</p>
+
+```MySQL
+AVG([필드값])
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+SELECT ROUND(AVG(DAILY_FEE)) AS AVERAGE_FEE FROM CAR_RENTAL_COMPANY_CAR WHERE CAR_TYPE = 'SUV'
+```
+</details><br><br><br>
+
+
+> **`ISNULL`**
+<p>: 빈값찾기</p>
+
+```MySQL
+ISNULL([필드값], [NULL일 경우 대체할 값])
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+SELECT ANIMAL_ID FROM ANIMAL_INS WHERE ISNULL(NAME)
+```
+</details><br><br><br>
+
+
+> **`IFNULL`**
+<p>: 빈값채우기</p>
+
+```MySQL
+IFNULL([필드값],[대체할 값])
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+SELECT ANIMAL_TYPE, IFNULL(NAME,'No name'), SEX_UPON_INTAKE FROM ANIMAL_INS ORDER BY ANIMAL_ID
+```
+</details><br><br><br>
+
+
+> **`DATE_FORMAT`**
+<p>: 날짜 출력형식 변경</p>
+
+```MySQL
+DATE_FORMAT([필드값],입력 형식)
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+SELECT  HISTORY_ID,
+        CAR_ID,
+        LEFT(START_DATE,10) AS START_DATE,
+        DATE_FORMAT(END_DATE,'%Y-%m-%d') AS END_DATE,
+        CASE WHEN DATEDIFF(END_DATE,START_DATE)+1 < 30 THEN '단기 대여'
+            ELSE '장기 대여' END AS RENT_TYPE
+FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+WHERE LEFT(START_DATE,7)='2022-09'
+ORDER BY HISTORY_ID DESC
+```
+
+<div align = 'center'>
+
+|format type|description|format type|description|
+|:--:|:--:|:--:|:--:|
+|%Y|년도 (2021)|%y|년도 (21)|
+|%M|월 (January, August)|%m|월 (01, 02, 11)|
+|%b|월(Jan, Aug)|%c|월 (1, 8)|
+|%W|요일(Wednesday, friday)|%a|요일(Wed, Fri)|
+|%d|일(01, 19)|%e|일(1, 19)|
+|%T|시간 (12:30:00)|%r|시간 (12:30:00 AM)|
+|%H|24시간 시간(01, 14, 18)|%l|12시간 시간 (01, 02, 06)|
+|%i|분 (00)|%S|초 (00)|
+
+</div>
+</details><br><br><br>
+
+
+> **`DATEDIFF`**
+<p>: 시간 차이 계산</p>
+
+```MySQL
+DATEDIFF(날짜1,날짜2)
+TIMEDIFF(날짜1,날짜2)
+PERIOD_DIFF(날짜1,날짜2)
+TIMESTAMPDIFF(단위,시간1,시간2)
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+SELECT CAR_ID, ROUND(AVG(DATEDIFF(END_DATE,START_DATE)+1),1) AS AVERAGE_DURATION
+FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+GROUP BY CAR_ID HAVING AVERAGE_DURATION >=7 
+ORDER BY AVERAGE_DURATION DESC , CAR_ID DESC
+```
+[TIMESTAMPDIFF 단위]
+
+|format type|description|format type|description|
+|:--:|:--:|:--:|:--:|
+|YEAR|년|QUARTER|분기|
+|MONTH|월|WEEK|주|
+|DAY|일|HOUR|시|
+|MINUTE|분|SECOND|초|
 
 </details><br><br><br>
--->
+
+
+> **`CASE`**
+<p>: 여러 조건에 맞게 값 변경하기</p>
+
+```MySQL
+CASE WHEN [필드값] [조건] THEN [대체값1]
+     WHEN [필드값] [조건] THEN [대체값2]
+     ...
+     ELSE [대체값n] END
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+SELECT BOARD_ID, WRITER_ID, TITLE, PRICE, 
+        CASE WHEN STATUS = 'SALE' THEN '판매중'
+             WHEN STATUS = 'RESERVED' THEN '예약중' 
+             ELSE '거래완료' 
+             END
+FROM USED_GOODS_BOARD
+WHERE CREATED_DATE LIKE '2022-10-05%'
+```
+</details><br><br><br>
+
+
+> **`CONCAT`**
+<p>: 문자열 합치기</p>
+
+```MySQL
+CONCAT(문자열1, 문자열2,...,문자열n)
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+SELECT CONCAT('/home/grep/src/', F.BOARD_ID, '/', F.FILE_ID, F.FILE_NAME, F.FILE_EXT) AS FILE_PATH 
+FROM USED_GOODS_FILE F 
+    INNER JOIN USED_GOODS_BOARD B
+            ON B.BOARD_ID = F.BOARD_ID
+WHERE B.VIEWS = (
+    SELECT MAX(VIEWS)
+    FROM USED_GOODS_BOARD)
+```
+</details><br><br><br>
 
 
 
 
 
 
-</details><br>
+
+
+
+
+
+
+
+
+
 
 
 
 <!--
-- 정렬하기<br>
-``` MySQL
-ORDER BY ASC(오름차순,기본값) 또는  DESC(내림차순)
-   * 여러 조건으로 정렬할 경우, 우선 적용할 컬럼 순서로 기입
-```
+> **`ORDER BY`**
+<p>: 정렬하기</p>
 
+```MySQL
 
--  빈값찾기<br>
-``` MySQL
-ISNULL(컬럼,NULL일 경우 대체할 값)
 ```
+<details><summary>예시 보기</summary>
 
-- 빈값채우기 <br>
 ``` MySQL
-IFNULL(컬럼,넣을값)
-```
 
-- 조건에 맞게 값 변경하기 <br>
-``` MySQL
-CASE WHEN 컬럼 조건 THEN 대체값1 ELSE 대체값2 END
 ```
-
-- 상위 n개 값 추출<br>
-``` MySQL
-LIMIT n
-```
-
--  중복값 제외<br>
-``` MySQL
-DISTINCT 컬럼 
-```
-
--  GROUP BY 추가 조건 <br>
-``` MySQL
-GROUP BY 컬럼 HAVING 조건
-```
-
--  평균값 구하기 - GROUP BY 사용안해도 됨<br>
-``` MySQL
-AVG(컬럼)
-```
-
--  날짜 출력형식 변경 <br>
-``` MySQL
-DATE_FORMAT(컬럼,'%Y-%m-%d')
-```
-
--  시간 차이 계산 <br>
-``` MySQL
-DATEDIFF(날짜1,날짜2)
-   * TIMEDIFF(), PERIOD_DIFF(), TIMESTAMPDIFF(단위,시간1,시간2) 등 다양하게 존재
-```
+</details><br><br><br>
 -->
+
+
+</details><br>
