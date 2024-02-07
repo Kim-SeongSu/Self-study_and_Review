@@ -377,9 +377,6 @@ REVOKE ALL ON *.* FROM 'root'@localhost;
 
 ## 3. SQL 함수
 
-- 다양한 함수 정리
-
-<details><summary>ㅤ</summary>
 <br>
 
 > **`ORDER BY`**
@@ -484,16 +481,24 @@ SELECT ANIMAL_ID FROM ANIMAL_INS WHERE ISNULL(NAME)
 </details><br><br><br>
 
 
-> **`IFNULL`**
+> **`IFNULL`** or **`COALESCE`**
 <p>: 빈값채우기</p>
 
 ```MySQL
+# MySQL 전용 함수
 IFNULL([필드값],[대체할 값])
+
+# 표준 SQL 함수
+COALESCE([필드값1],[필드값2],,...,[필드값n])   #필드값1이 NULL이면 필드값2가, 필드값2가 NULL이라면 필드값3가 반환되는 형식
 ```
 <details><summary>예시 보기</summary>
 
 ``` MySQL
+# MySQL
 SELECT ANIMAL_TYPE, IFNULL(NAME,'No name'), SEX_UPON_INTAKE FROM ANIMAL_INS ORDER BY ANIMAL_ID
+
+# PostgreSQL
+SELECT name FROM Customer WHERE COALESCE(referee_id, 0) != 2
 ```
 </details><br><br><br>
 
@@ -637,6 +642,3 @@ WHERE B.VIEWS = (
 ```
 </details><br><br><br>
 -->
-
-
-</details><br>
