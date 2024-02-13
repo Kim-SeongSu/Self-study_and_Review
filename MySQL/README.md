@@ -485,7 +485,7 @@ SELECT ANIMAL_ID FROM ANIMAL_INS WHERE ISNULL(NAME)
 <p>: 빈값채우기</p>
 
 ```MySQL
-# MySQL 전용 함수
+# MySQL 함수
 IFNULL([필드값],[대체할 값])
 
 # 표준 SQL 함수
@@ -591,6 +591,26 @@ WHERE CREATED_DATE LIKE '2022-10-05%'
 ```
 </details><br><br><br>
 
+> **`IF`**
+<p>: 조건에 맞게 값 출력하기</p>
+
+```MySQL
+# MySQL 함수
+IF([조건문], [참일 때 값], [거짓일 때 값])
+
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+SELECT S.user_id,round(avg(if(C.action = 'confirmed',1,0)),2) AS confirmation_rate 
+FROM Signups S
+    LEFT JOIN Confirmations C
+    ON S.user_id = C.user_id
+GROUP BY S.user_id
+```
+</details><br><br><br>
+
+
 
 > **`CONCAT`**
 <p>: 문자열 합치기</p>
@@ -628,8 +648,66 @@ ORDER BY B.WRITER_ID DESC
 ```
 </details><br><br><br>
 
+> **`BETWEEN`**
+<p>: 특정 범위 지정 구문</p>
+
+```MySQL
+BETWEEN [범위 시작] AND [범위 끝]
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+SELECT P.product_id, IFNULL(round(sum(P.price*U.units)/sum(U.units),2),0) AS average_price
+FROM Prices P
+    LEFT JOIN UnitsSold U
+    ON P.product_id = U.product_id
+        AND U.purchase_date BETWEEN P.start_date AND P.end_date
+GROUP BY P.product_id
+```
+</details><br><br><br>
 
 
+> **`CAST`**
+<p>: 타입 변경 함수</p>
+
+```MySQL
+# SQL 표준 함수
+CAST([변환할 값] AS [데이터형식])
+
+# postgreSQL 함수
+:: [데이터 형식]
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+SELECT P.product_id, COALESCE(ROUND(cast(sum(P.price * U.units) as numeric) /sum(U.units),2),0) AS average_price
+
+/*
+- postgreSQL의 경우,
+SELECT P.product_id, COALESCE(ROUND(sum(P.price * U.units :: numeric) /sum(U.units),2),0) AS average_price
+로 간략하게 표현 가능
+*/
+
+FROM Prices P
+    LEFT JOIN UnitsSold U
+    ON P.product_id = U.product_id
+    AND U.purchase_date BETWEEN P.start_date and P.end_date
+GROUP BY P.product_id
+```
+
+|SQL 표준 데이터형식|설명|
+|:--:|:--:|
+|BINARY|이진 데이터|
+|**CHAR**|**문자열 타입**|
+|DATA|날짜|
+|DATATIME|날짜 & 시간|
+|DECIMAL|소수점 까지|
+|JSON|JSON 타입 SIGEND|
+|**INTEGER**|**정수형**|
+|**NUMERIC**|**실수형**|
+|TIME|시간 UNSIGNED INTEGER (양의 정수형)|
+
+</details><br><br><br>
 
 
 
