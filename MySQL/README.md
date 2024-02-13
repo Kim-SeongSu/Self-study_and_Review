@@ -596,11 +596,19 @@ WHERE CREATED_DATE LIKE '2022-10-05%'
 <p>: 문자열 합치기</p>
 
 ```MySQL
+# 단순 문자열 합치기
 CONCAT(문자열1, 문자열2,...,문자열n)
+
+# 구분자로 문자열 합치기
+CONCAT_WS('구분자', 문자열1, 문자열2,...,문자열n)
+
+# 그룹핑하여 추출한 문자열 합치기
+GROUP_CONCAT( (distinct) 필드값 (order by ~) (SEPARATOR '구분자') ) 
 ```
 <details><summary>예시 보기</summary>
 
 ``` MySQL
+# CONCAT
 SELECT CONCAT('/home/grep/src/', F.BOARD_ID, '/', F.FILE_ID, F.FILE_NAME, F.FILE_EXT) AS FILE_PATH 
 FROM USED_GOODS_FILE F 
     INNER JOIN USED_GOODS_BOARD B
@@ -608,6 +616,15 @@ FROM USED_GOODS_FILE F
 WHERE B.VIEWS = (
     SELECT MAX(VIEWS)
     FROM USED_GOODS_BOARD)
+
+
+# CONCAT_WS
+SELECT U.USER_ID, U.NICKNAME, CONCAT_WS(' ',U.CITY, U.STREET_ADDRESS1, U.STREET_ADDRESS2) AS 전체주소, CONCAT_WS(' ',LEFT(U.TLNO,3),SUBSTR(U.TLNO,4,4),RIGHT(U.TLNO,4)) AS 전화번호
+FROM USED_GOODS_BOARD B
+    INNER JOIN USED_GOODS_USER U
+    ON B.WRITER_ID = U.USER_ID 
+GROUP BY B.WRITER_ID HAVING COUNT(B.BOARD_ID) > 2
+ORDER BY B.WRITER_ID DESC
 ```
 </details><br><br><br>
 
