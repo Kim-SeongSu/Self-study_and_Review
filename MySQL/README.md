@@ -18,7 +18,7 @@
 -  데이터베이스나 테이블 등을 생성, 삭제하거나 그 구조를 변경하기 위한 명령어
 -  데이터베이스를 정의하거나 수정
 -  명령어 수행시 이전 상태로 복귀 불가
-<details><summary>ㅤ</summary>
+<details><summary>ㅤCREATEㅤ|ㅤALTERㅤ|ㅤDROPㅤ|ㅤTRUNCATE</summary>
 
 <br>
 
@@ -133,7 +133,7 @@ TRUNCATE TABLE test_1
   -  사용자와 데이터베이스 관리 시스템간의 인터페이스 제공
   -  트랜잭션 제어어를 활용하여 실행 전 상태로 복귀 가능
 
-<details><summary>ㅤ</summary>
+<details><summary>ㅤSELECTㅤ|ㅤINSERTㅤ|ㅤUPDATEㅤ|ㅤDELETE</summary>
 
 <br>
 
@@ -249,7 +249,7 @@ DELETE FROM Reservation       (= TRUNCATE TABLE Reservation)
   -   무결성을 유지시키면서 내부적으로 여러가지 규정이나 제약조건 등을 기술하기 위해 사용되는 명령어
   -   사용자 별로 데이터베이스에 접근할 수 있는 권한을 부여하거나 회수 
 
-<details><summary>ㅤ</summary>
+<details><summary>ㅤGRANTㅤ|ㅤREVOKE</summary>
 
 <br>
 
@@ -296,7 +296,7 @@ REVOKE ALL ON *.* FROM 'root'@localhost;
 
 ### 4) 그 외의 명령어
 - Database 및 Table과 관련된 명령어
-<details><summary>ㅤ</summary>
+<details><summary>ㅤUSEㅤ|ㅤSHOWㅤ|ㅤDESCㅤ|ㅤSQL dump & importㅤ</summary>
 <br>
 
 > **`USE`**
@@ -325,6 +325,66 @@ REVOKE ALL ON *.* FROM 'root'@localhost;
 
 # EXPLAIN [테이블명];
 ```
+<br><br>
+> **`SQL dump & import`**
+<p>: dump 파일(서버에 기억된 내용의 일부 or 전부를 저장해둔 파일)을 통해 backup 및 import 가능</p>
+
+```MySQL
+# MySQL
+## DB 전체 dump
+$ mysqldump -u[사용자 id] -p'[password]' [DB명] > [저장할 파일명.sql]
+   * 비밀번호는 꼭 입력 안해도 나중에 입력 가능
+
+## 특정 DB의 schema dump
+$ mysqldump -u[사용자 id] -p -d [DB명] > [저장할 파일명.sql]
+
+## 특정 테이블 dump
+$ mysqldump -u[사용자 id] -p [DB명] [테이블명] > [저장할 파일명.sql]
+
+
+
+
+## 전체 스키마(DB) import
+$ mysql -u[사용자 id] -p [DB명] < [덤프파일명.sql]
+
+## 특정 테이블 import
+$ mysql -u[사용자 id] -p -[DB명]=[테이블명] < [덤프파일명.sql]
+
+```
+<br>
+
+```PostgreSQL
+# PostgresSQL
+## 특정 DB dump
+$ pg_dump [DB명] > [저장할 파일명.sql]
+
+## 모든 DB dump
+$ pg_dumpall > [저장할 파일명.sql]
+
+
+
+
+## 특정 DB import
+$ psql [DB명] < [덤프파일명.sql]
+     * 오류 발생 시 작업 정지 옵션: ON_ERROR_STOP
+     * 오류 발생 시 모든 작업 취소 옵션: single-transaction
+$ psql --set ON_ERROR_STOP=1 --single-transaction [DB명] < [덤프파일명.sql]
+```
+
+<details><summary>예시 보기</summary>
+
+``` MySQL
+# MySQL
+## 특정 DB dump
+mysqldump -uroot -p'password' -d DB_test > DB_test_mysqldump.sql
+
+## 특정 DB import
+mysql -h ndsap -u root -p DB_test < DB_test_mysqldump.sql
+```
+</details><br><br><br>
+
+
+
 
 <br><br><br>
 </details><br>
@@ -333,9 +393,19 @@ REVOKE ALL ON *.* FROM 'root'@localhost;
 
 
 
+
+
+
+
+
 ## 2. SQL 타입
 <details><summary>ㅤ</summary>
 <br>
+
+
+
+
+
 
 
 
