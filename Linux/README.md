@@ -636,8 +636,66 @@ $ tail -f /root/test/date.log로 확인
 
 </div>
 
+</details><br><br><br>
+
+> `scp`  ( SecureCopy )
+<p>: ssh 원격 프로토콜 기반 파일 전송 프로토콜</p>
+
+``` Linux
+$ scp [options] [파일명1]..[파일명n] [받는 계정 id]@[받는 계정 ip] : [전송 될 절대위치]
+```
+
+<details><summary>접기/펼치기</summary>
+
+``` Linux
+* 주요 옵션
+  -r : 디렉토리 내 모든 파일/디렉토리 복사
+  -P : 포트 번호 지정 복사
+  -c : 압축 복사
+  -v : 전송 과정 출력 복사
+  -a : 아카이브 모드 복사
+      ex) $ ls -al
+       >> .  ..  .hidden_dir  .hidden_file.txt  test_script.sh
+```
+
 
 </details><br><br><br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 유용한 명령문
+> `현 디렉토리의 파일 수 세기`
+
+``` Linux
+$ ls -l | grep ^- | wc -l
+```
+<br><br>
+
+> `현 디렉토리의 내용 변경 실시간 확인`
+
+``` Linux
+$ watch -d ls -l
+```
+<br><br>
+
+> `파일 내용 변경 실시간 확인`
+
+``` Linux
+$ tail -f [파일명]
+```
+<br><br>
 
 
 
