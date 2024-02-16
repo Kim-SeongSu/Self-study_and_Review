@@ -1,4 +1,12 @@
-﻿# What is a Elasticsearch?
+<div align='center'>
+<img src="https://capsule-render.vercel.app/api?type=transparent&color=timeAuto&height=100&section=header&fontSize=50&descAlign=62&descSize=20&descAlignY=81&text=Elasticsearch&desc=Study%20Note"/>
+
+</div><br><br>
+
+
+ 
+ 
+ # What is a Elasticsearch?
 > [!IMPORTANT]
 > **Elasticsearch**란 **Apache Lucene 기반의 Java 오픈소스 분산 검색 엔진**으로, HTTP 웹 인터페이스와 스키마에서 자유로운 JSON 문서와 함께 분산 멀티테넌스[^1] 지원 전문 검색엔진을 제공한다. 
 
