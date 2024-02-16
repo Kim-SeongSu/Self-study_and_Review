@@ -1,6 +1,6 @@
 ﻿# What is a Elasticsearch?
 > [!IMPORTANT]
-> [`Elasticsearch`](https://ko.wikipedia.org/wiki/%EC%9D%BC%EB%9E%98%EC%8A%A4%ED%8B%B1%EC%84%9C%EC%B9%98)란 **Apache Lucene 기반의 Java 오픈소스 분산 검색 엔진**으로, HTTP 웹 인터페이스와 스키마에서 자유로운 JSON 문서와 함께 분산 멀티테넌스[^1] 지원 전문 검색엔진을 제공한다. 
+> **Elasticsearch**란 **Apache Lucene 기반의 Java 오픈소스 분산 검색 엔진**으로, HTTP 웹 인터페이스와 스키마에서 자유로운 JSON 문서와 함께 분산 멀티테넌스[^1] 지원 전문 검색엔진을 제공한다. 
 
 [^1]:software multitenancy는 여러 테넌스(**사용자**)를 가진 소프트웨어 아키텍처라는 의미로 클라우드 서비스처럼 여러 사용자가 동시에 같은 작업을 진행할 수 있게하는 역할을 한다.
 
@@ -10,7 +10,7 @@
 
 <br>
 
-**Elasticsearch**는 하둡(hadoop)처럼 여러 대의 서버를 묶어 하나의 클러스터를 구성한다. <br> 차이가 있다면, 하둡에서는 **Master-Slave 구조**를 사용자가 직접 지정했지만, Elasticsearch는 클러스터를 이루는 **각각의 서버가 유동적으로 Master 또는 Slave**가 될 수도 있다. <br>
+[`Elasticsearch`](https://ko.wikipedia.org/wiki/%EC%9D%BC%EB%9E%98%EC%8A%A4%ED%8B%B1%EC%84%9C%EC%B9%98)는 하둡(hadoop)처럼 여러 대의 서버를 묶어 하나의 클러스터를 구성한다. <br> 차이가 있다면, 하둡에서는 **Master-Slave 구조**를 사용자가 직접 지정했지만, Elasticsearch는 클러스터를 이루는 **각각의 서버가 유동적으로 Master 또는 Slave**가 될 수도 있다. <br>
 이러한 이유로 `jvm.options`파일에서 Heap Size[^2]를 Master Node에 적합하도록 설정해두고 `elasticsearch.yml`파일에서 해당 서버를 Masternode로 설정하기도 한다.<br>
 
 [^2]: 프로그램에서 동적으로 할당된 메모리를 관리하는데 사용되는 영역인 **힙 메모리**(Heap Memory)의 크기를 설정하는 것으로, 너무 크지도 너무 작지도 않게 적절히 설정해야한다.
@@ -27,6 +27,7 @@ Elasticsearch는 검색의 용도로 단독으로 사용하기도 하고, **ELK*
 ### 1) Cluster (클러스터)
 
 **가장 큰 시스템 단위**로 `최소 하나 이상의 노드로 이루어진 노드들의 집합`이다. 같은 클러스터 내에서만 **데이터의 접근 및 교환**이 이뤄지는 독립적인 시스템이다. 여러 대의 서버가 하나의 클러스터를 구성할 수 있고, 한 서버에 포트번호를 다르게 연결하여 독자적인 클러스터를 구성할 수도 있다.<br>
+<br>
 
 ### 2) Node (노드)
 
@@ -123,10 +124,14 @@ Elasticsearch를 `구성하는 하나의 단위 프로세스`를 의미한다. �
 ```Linux
 # curl -XPUT 'localhost:9200/index명?pretty'
 ```
+<p> 
+ㅤㅤ* index명을 설정할 때는 소문자로만 작성해야 한다.
+</p>
+
 <details><summary>예시 보기</summary>
 
 ``` Linux
-# curl -XPUT 'localhost:9200/soccer_Player?pretty'
+# curl -XPUT 'localhost:9200/soccer_player?pretty'
 ```
 </details><br><br>
 
@@ -153,32 +158,31 @@ on' -d @파일명.json
 ㅤㅤ* 기존에 존재하지 않는 _index명, _type명을 입력해도 자동으로 생성됨.<br>
 ㅤㅤ* _id명 또한 미입력 시 자동 생성<br>
 ㅤㅤ* -H 옵션으로 Request에 대한 Content-Type을 application/json 타입으로 지정 후, -d 옵션으로 {}안의 값 입력
-</p><br>
+</p>
 
 <details><summary>예시 보기</summary>
 
 ``` Linux
 - 직접 입력하여 데이터 추가
-# curl -XPOST 'localhost:9200/soccer_Player/info/1?pretty' -H 'Content-Type: application/json' -d '{
+# curl -XPOST 'localhost:9200/soccer_player/info/1?pretty' -H 'Content-Type: application/json' -d '{
 "Name": "손흥민",
-"Nation": "Korea",
+"Nationality": "Korea",
 "Team": "Tottenham Hotspur F.C.",
 "Age": "31",
-"Main Position": "LW",
-"Sub Position": "ST"
+"Position": "Forward"
 }'
 
 - 데이터를 json 형식의 파일로 만들어 API 호출
 # vim player_info.json
 {
 "Name": "김민재",
-"Nation": "Korea",
+"Nationalityality": "Korea",
 "Team": "Tottenham Hotspur F.C.",
 "Age": "27",
-"Main Position": "CB"
+"Position": "Defender"
 }
 
-# curl -XPOST 'localhost:9200/soccer_Player/info/2?pretty' -H 'Content-Type: application/json' -d @player_info.json
+# curl -XPOST 'localhost:9200/soccer_player/info/2?pretty' -H 'Content-Type: application/json' -d @player_info.json
 ```
 </details><br><br>
 
@@ -204,14 +208,14 @@ on' -d @파일명.json
 
 ``` Linux
 - 특정 index의 모든 document 조회
-# curl -XGET 'localhost:9200/soccer_Player/_search?pretty'
+# curl -XGET 'localhost:9200/soccer_player/_search?pretty'
 
 - 특정 index의 특정 id값의 document 조회
-# curl -XGET 'localhost:9200/soccer_Player/info/1?pretty'
+# curl -XGET 'localhost:9200/soccer_player/info/1?pretty'
 
 - 실제 데이터인 _source만 조회 & 특정 field의 _source만 조회
-# curl -XGET 'localhost:9200/soccer_Player/info/1?pretty&filter_path=_source'
-# curl -XGET 'localhost:9200/soccer_Player/info/1?pretty&filter_path=_source.Nation'
+# curl -XGET 'localhost:9200/soccer_player/info/1?pretty&filter_path=_source'
+# curl -XGET 'localhost:9200/soccer_player/info/1?pretty&filter_path=_source.Nationality'
 ```
 </details><br><br>
 
@@ -219,22 +223,38 @@ on' -d @파일명.json
 > **`document 수정`**
 
 ```Linux
-# curl -XPUT 'localhost:9200 index명/type명/id명?pretty' -H 'Content-Type: application/js
-on' -d '{
-"수정하려는 field명": "field값"
-}'
+- 덮어쓰기
+# curl -XPUT 'localhost:9200/index명/type명/id명?pretty' -H 'Content-Type: application/js
+  on' -d '{
+  "수정하려는 field명": "field값"
+  }'
+
+
+- 특정값만 변경
+# curl -XPOST "localhost:9200/index명/type명/id명/_update?pretty" -H "Content-Type: application/json" -d '{
+  "doc": {"수정하려는 field명": "field값"}
+  }'
 ```
 <p> 
 ㅤㅤ* 단, 기존에 존재하는 내용만 수정가능 ( 수정 & 추가 동시에 불가 )<br>
-</p><br>
+</p>
 
 <details><summary>예시 보기</summary>
 
 ``` Linux
-# curl -XPUT 'localhost:9200 soccer_Player/info/2?pretty' -H 'Content-Type: application/js
-on' -d '{
-"Team": "FC BAYERN MÜNCHEN"
-}'
+- 덮어쓰기
+# curl -XPUT 'localhost:9200/soccer_player/info/2?pretty' -H 'Content-Type: application/json' -d '{
+  "Name": "김민재",
+  "Nationality": "Korea",
+  "Team":"FC BAYERN MÜNCHEN",
+  "Age": "27",
+  "Position": "Defender"
+  }'
+
+- 특정값만 변경
+# curl -XPOST "localhost:9200/soccer_player/info/3/_update?pretty" -H "Content-Type: application/json" -d '{
+  "doc": {"Team":"FC BAYERN MÜNCHEN"}
+  }'
 ```
 </details><br><br>
 
@@ -243,24 +263,18 @@ on' -d '{
 
 ```Linux
 - 특정 id의 document 삭제
-# curl -XDELETE 'localhost:9200 index명/type명/id명?pretty'
+# curl -XDELETE 'localhost:9200/index명/type명/id명?pretty'
 
 - index 삭제
-# curl -XDELETE 'localhost:9200 index명?pretty'
+# curl -XDELETE 'localhost:9200/index명?pretty'
 ```
 <details><summary>예시 보기</summary>
 
 ``` Linux
 - 특정 id의 document 삭제
-# curl -XDELETE 'localhost:9200 soccer_Player/info/2?pretty'
+# curl -XDELETE 'localhost:9200/soccer_player/info/2?pretty'
 
 - index 삭제
-# curl -XDELETE 'localhost:9200 soccer_Player?pretty'
+# curl -XDELETE 'localhost:9200/soccer_player?pretty'
 ```
-</details><br><br>
-
-
-
-
-
 </details><br><br>
