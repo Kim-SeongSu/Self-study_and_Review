@@ -1,5 +1,5 @@
 <div align='center'>
-<img src="https://capsule-render.vercel.app/api?type=transparent&color=timeAuto&height=100&section=header&fontSize=50&descSize=20&descAlign=60&descAlignY=83&text=SQL%20Study&desc=Basic%20grammar"/>
+<img src="https://capsule-render.vercel.app/api?type=transparent&color=0:FF8C00,100:4682B4&height=100&section=header&fontSize=50&descSize=20&descAlign=60&descAlignY=83&text=SQL%20Study&desc=Basic%20grammar"/>
 </div>
 <br><br>
 
@@ -780,11 +780,60 @@ GROUP BY P.product_id
 </details><br><br><br>
 
 
+> **`JOIN`**
+<p>: 여러 테이블을 하나의 테이블로 합치기</p>
+
+```MySQL
+첫번째 테이블 이름
+    INNER JOIN 두번째 테이블 이름     # MySQL의 경우, INNER JOIN, JOIN, CROSS JOIN이 같은 의미로 사용
+    ON 조건                          # WHERE 절에서 사용할 수 있는 모든 조건 사용 가능
+
+    LEFT JOIN 두번째 테이블 이름
+    ON 조건
+
+    RIGHT JOIN 두번째 테이블 이름
+    ON 조건
+```
+<details><summary>예시 보기</summary>
+<br>
+
+<div align='center'>
+    <img 
+        src= "https://velog.velcdn.com/images/youjung/post/2710318f-dd8a-4e37-91ee-efb4d05713e2/image.png"
+        style="width:75%; height:60%;"
+    />
+</div><br>
+
+``` MySQL
+SELECT stu.student_id, stu.student_name, sub.subject_name, COALESCE(COUNT(ex.subject_name),0) AS attended_exams
+FROM Students stu
+    CROSS JOIN Subjects sub
+    LEFT JOIN Examinations ex
+    ON  stu.student_id = ex.student_id and sub.subject_name = ex.subject_name
+GROUP BY stu.student_id, stu.student_name, sub.subject_name
+```
+</details><br><br><br>
 
 
+> **`UNION`**
+<p>: 여러 개의 SELECT 문의 결과를 하나의 테이블로 통합</p>
 
+```MySQL
+SELECT 필드이름 FROM 테이블이름
+UNION       # 중복된 레코드에 대해 DISTINCT 자동 적용
+UNION ALL   # 중복된 레코드까지 모두 출력
+SELECT 필드이름 FROM 테이블이름
+```
+<details><summary>예시 보기</summary>
 
-
+``` MySQL
+SELECT U.FLAVOR
+FROM (SELECT * FROM FIRST_HALF UNION ALL SELECT * FROM JULY) U
+GROUP BY 1
+ORDER BY SUM(U.TOTAL_ORDER) DESC
+LIMIT 3
+```
+</details><br><br><br>
 
 
 
