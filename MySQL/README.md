@@ -836,6 +836,204 @@ LIMIT 3
 </details><br><br><br>
 
 
+> **`@사용자 정의 변수`** (사용자 변수)
+<p>: 사용자가 지정하여 사용할 수 있는 변수</p>
+
+```MySQL
+SET @[변수명] := [변수 초기값]   또는   FROM (SELECT @[변수명] := [변수 초기값]) 으로 변수 지정
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+# 0 ~ 10의 수가 들어간 필드를 만들고 싶다면,
+## 방법 1: SET으로 변수 정의하고 초기값 할당
+SET @num = 0;
+
+SELECT (@num = @num +1) AS number
+FROM USER_INFO
+
+## 방법 2: 한번 실행되는 FROM 절의 in-line view에서 변수 정의 및 초기화
+SELECT (@num = @num +1) AS number
+FROM 
+```
+</details><br><br><br>
+
+
+> **`OVER 절`**
+<p>: WINDOW 함수를 적용하기 전에 행 집합의 분할과 순서를 결정</p>
+
+```MySQL
+OVER (   
+       [ <PARTITION BY clause> ]   # 쿼리 결과 집합을 파티션으로 분할
+       [ <ORDER BY clause> ]       # 쿼리 결과 집합의 각 파티션 내에서 행의 논리적 순서를 정의
+       [ <ROW or RANGE clause> ]   # ORDER BY 꼭 필요, 파티션 내의 시작/끝 범위 지정 
+      ) 
+```
+<details><summary>예시 보기</summary>
+
+<div align='center'>
+<기본 테이블><br>
+
+|번호|날짜|수량|
+|:--:|:--:|:--:|
+|1|2024-02-23|5|
+|2|2024-02-24|-3|
+|3|2024-02-25|6|
+</div><br>
+
+``` MySQL
+# ORDER BY
+SELECT 번호, 날짜, 수량, SUM(수량) OVER(ORDER BY 날짜) AS 재고
+FROM 창고
+
+
+/*          OVER절 속 ORDER BY에 의해 행집합이 정의 되고,
+            그 결과에 따라 각 행별로 SUM(수량) 함수에 적용된다
+                1번 행: SUM(1)
+                2번 행: SUM(1, 2)
+                3번 행: SUM(1, 2, 3)                             */
+```
+<div align='center'><'ORDER BY' 적용 테이블><br>
+    
+|번호|날짜|수량|**재고**|
+|:--:|:--:|:--:|:--:|
+|1|2024-02-23|5|**5**|
+|2|2024-02-24|-3|**2**|
+|3|2024-02-25|6|**8**|
+</div><br><br>
+
+
+``` MySQL
+# PARTITION BY
+SELECT 번호, 날짜, 수량, SUM(수량) OVER(PARTITION BY 물품 ORDER BY 날짜) AS 재고
+FROM 창고
+ORDER BY 날짜
+
+
+/*            PARTITION BY를 통해 특정 컬럼별로 각각의 행집합을 나눌 수 있다.
+              'A'와 'B'로 이루어진 '물품'컬럼을 PARTITION으로 지정하면,
+                    'A'에 해당하는 행에 대해서 SUM(수량) 계산,
+                    'B'에 해당하는 행에 대해서 SUM(수량) 계산이 이뤄진다.            */
+```
+<div align='center'><'PARTITION BY' 적용 테이블><br>
+    
+|번호|날짜|물품|수량|**재고**|
+|:--:|:--:|:--:|:--:|:--:|
+|1|2024-02-23|**A**|5|**5**|
+|2|2024-02-24|**A**|-3|**2**|
+|3|2024-02-25|*B*|4|*4*|
+|4|2024-02-26|**A**|6|**8**|
+|5|2024-02-27|*B*|-2|*2*|
+</div><br><br>
+
+</details><br><br><br>
+
+
+
+
+
+> **`RANK`** ㅤㅤ(ㅤ[Window Function](https://kimsyoung.tistory.com/entry/%EB%8C%80%ED%91%9C%EC%A0%81%EC%9D%B8-%EC%9C%88%EB%8F%84%EC%9A%B0-%ED%95%A8%EC%88%98-6%EA%B0%80%EC%A7%80-%EC%95%8C%EC%95%84%EB%B3%B4%EA%B8%B0) : `RANK()`, `DENSE_RANK()`, `ROW_NUMBER()`, `LEAD()`, `LAG()`ㅤ)
+<p>: 순위 구하기</p>
+
+```MySQL
+rank() over (ORDER BY 컬럼명)
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+SELECT MP.MEMBER_NAME, RR.REVIEW_TEXT, LEFT(RR.REVIEW_DATE,10) REVIEW_DATE
+FROM REST_REVIEW RR
+    LEFT JOIN MEMBER_PROFILE MP
+    ON RR.MEMBER_ID = MP.MEMBER_ID
+WHERE RR.MEMBER_ID in (
+    SELECT RRRank.MEMBER_ID
+    FROM (SELECT MEMBER_ID, rank() over (ORDER BY count(MEMBER_ID) DESC) ranking   # over
+          FROM REST_REVIEW
+          GROUP BY MEMBER_ID
+         ) RRRank
+    WHERE RRRank.ranking = 1)
+ORDER BY 3, 2
+```
+</details><br><br><br>
+
+
+> **`WITH`**  (CTE; Common Table Expression)
+<p>: 메모리 상에 가상의 테이블 저장</p>
+
+```MySQL
+WITH [임시테이블명] AS(
+    가상 테이블 내용
+)
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+WITH TBL AS
+(
+	SELECT '철수' AS NAME, 20 AS AGE  # ('NAME':'철수', 'AGE':20)이라는 임의의 값을 가상의 테이블을 통해 출력, 결과를 UNION
+	UNION ALL
+	SELECT NAME, AGE
+	  FROM TB1
+)
+
+SELECT NAME, AGE FROM TBL;
+```
+</details><br><br><br>
+
+
+> **`RECURSIVE 문`**
+<p>: 자신(테이블)의 값 참조 (재귀 쿼리)</p>
+
+```MySQL
+with recursive 뷰명 as (
+    초기 SQL
+    UNION (ALL)
+    SELECT 반복할 SQL FROM 뷰명 WHERE 반복문 정지 조건 )
+
+SELECT * FROM 뷰명
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+WITH RECURSIVE HOURS AS(
+    SELECT 0 as HOUR
+    UNION ALL
+    SELECT HOUR + 1 FROM HOURS WHERE HOUR < 23)    # 0 ~ 23 출력됨
+
+SELECT H.*, COUNT(ANIMAL_ID) COUNT
+FROM HOURS H
+    LEFT JOIN ANIMAL_OUTS AO
+    ON H.HOUR = HOUR(DATETIME)
+GROUP BY HOUR
+```
+</details><br><br><br>
+
+
+> **`CONV`** /  **`BIN`**
+<p>: 진법 변환 함수</p>
+
+```MySQL
+# CONV
+CONV([변환하고 싶은 수 또는 컬럼], [변환 전 진법], [변환 후 진법])
+
+# BIN
+BIN([변환하고 싶은 수 또는 컬럼])
+```
++ 함께 알면 좋은 개념: [비트 연산자](https://gksid102.tistory.com/90)
+
+<details><summary>예시 보기</summary>
+
+``` MySQL
+SELECT CONV(1024,2,10)
+
+SELECT BIN(10)
+```
+<br>
+<div align='center'>
+    <img src="https://blog.kakaocdn.net/dn/QUoY2/btrpPEGsyIE/HtdQHrgG9hiZYH3k6uAOC0/img.png"/>
+</div>
+
+</details><br><br><br>
 
 
 
