@@ -573,15 +573,20 @@ SELECT name FROM Customer WHERE COALESCE(referee_id, 0) != 2
 </details><br><br><br>
 
 
-> **`DATE_FORMAT`**
+> **`DATE_FORMAT`** or **`TO_CHAR`**
 <p>: 날짜 출력형식 변경</p>
 
 ```MySQL
+# MySQL
 DATE_FORMAT([필드값],입력 형식)
+
+# PostgreSQL
+TO_CHAR([필드값],입력 형식)
 ```
 <details><summary>예시 보기</summary>
 
 ``` MySQL
+# MySQL
 SELECT  HISTORY_ID,
         CAR_ID,
         LEFT(START_DATE,10) AS START_DATE,
@@ -591,20 +596,32 @@ SELECT  HISTORY_ID,
 FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
 WHERE LEFT(START_DATE,7)='2022-09'
 ORDER BY HISTORY_ID DESC
+
+# PostgreSQL
+SELECT 
+    TO_CHAR(trans_date, 'yyyy-mm') AS month,
+    country, 
+    COUNT(state) AS trans_count,
+    COUNT(state) FILTER(WHERE state='approved') AS approved_count,
+    SUM(amount) AS trans_total_amount,
+    SUM(CASE WHEN state='approved' THEN amount ELSE 0 END) AS approved_total_amount
+FROM Transactions
+GROUP BY 1, 2
 ```
 
 <div align = 'center'>
 
-|format type|description|format type|description|
-|:--:|:--:|:--:|:--:|
-|%Y|년도 (2021)|%y|년도 (21)|
-|%M|월 (January, August)|%m|월 (01, 02, 11)|
-|%b|월(Jan, Aug)|%c|월 (1, 8)|
-|%W|요일(Wednesday, friday)|%a|요일(Wed, Fri)|
-|%d|일(01, 19)|%e|일(1, 19)|
-|%T|시간 (12:30:00)|%r|시간 (12:30:00 AM)|
-|%H|24시간 시간(01, 14, 18)|%l|12시간 시간 (01, 02, 06)|
-|%i|분 (00)|%S|초 (00)|
+
+|format type|MySQL|PostgreSQL|format type|MySQL|PostgreSQL|
+|:--:|:--:|:--:|:--:|:--:|:--:|
+|**%Y**|년도 (2021)|**YYYY**|**%y**|년도 (21)|**YY**|
+|**%M**|월 (January, August)|**MON**|**%m**|월 (01, 02, 11)|-|
+|**%b**|월(Jan, Aug)|-|**%c**|월 (1, 8)|**MM**|
+|**%W**|요일(Wednesday, friday)|-|**%a**|요일(Wed, Fri)|**DY**|
+|**%d**|일(01, 19)|-|**%e**|일(1, 19)|**DD**|
+|**%T**|시간 (12:30:00)|-|**%r**|시간 (12:30:00 AM)|-|
+|**%H**|24시간 시간(01, 14, 18)|**HH24**|**%l**|12시간 시간 (01, 02, 06)|**HH12**|
+|**%i**|분 (00)|**MI**|**%S**|초 (00)|**SS**|
 
 </div>
 </details><br><br><br>
@@ -1036,7 +1053,26 @@ SELECT BIN(10)
 </details><br><br><br>
 
 
+>  **`FILTER`**
+<p>: 하나의 SELECT 문에서 다른 조건을 갖는 COUNT를 여러개 구하기 (PostgreSQL)</p>
 
+```PostgreSQL
+COUNT([필드값]) FILTER(WHERE 조건)
+```
+<details><summary>예시 보기</summary>
+
+``` PostgreSQL
+SELECT 
+    TO_CHAR(trans_date, 'yyyy-mm') AS month,
+    country, 
+    COUNT(state) AS trans_count,
+    COUNT(state) FILTER(WHERE state='approved') AS approved_count,
+    SUM(amount) AS trans_total_amount,
+    SUM(CASE WHEN state='approved' THEN amount ELSE 0 END) AS approved_total_amount
+FROM Transactions
+GROUP BY 1, 2
+```
+</details><br><br><br>
 
 
 
