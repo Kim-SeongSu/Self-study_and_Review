@@ -655,6 +655,33 @@ ORDER BY AVERAGE_DURATION DESC , CAR_ID DESC
 
 </details><br><br><br>
 
+> **`DATE_ADD`**  /  **`INTERVAL`**
+<p>: 날짜 더하기, 빼기</p>
+
+```MySQL
+# MySQL
+DATE_ADD([필드값], 숫자)
+
+#PostgreSQL
+[필드값] + 또는 - INTERVAL '숫자   날짜 형식'
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+# MySQL
+SELECT ROUND(COUNT(*) / (SELECT COUNT(DISTINCT player_id) FROM Activity), 2) AS fraction
+FROM Activity
+WHERE (player_id, event_date) IN   (SELECT player_id, DATE_ADD(MIN(event_date), INTERVAL 1 DAY)
+                                    FROM Activity
+                                    GROUP BY player_id)
+
+#PostgreSQL
+SELECT ROUND(COUNT(DISTINCT player_id)::numeric / (SELECT COUNT(DISTINCT player_id) FROM Activity), 2) AS fraction
+FROM Activity
+WHERE (player_id, event_date - INTERVAL '1 DAY') IN (SELECT player_id, MIN(event_date) AS first_login FROM Activity GROUP BY player_id)
+```
+</details><br><br><br>
+
 
 > **`CASE`**
 <p>: 여러 조건에 맞게 값 변경하기</p>
@@ -944,10 +971,6 @@ ORDER BY 날짜
 </div><br><br>
 
 </details><br><br><br>
-
-
-
-
 
 > **`RANK`** ㅤㅤ(ㅤ[Window Function](https://kimsyoung.tistory.com/entry/%EB%8C%80%ED%91%9C%EC%A0%81%EC%9D%B8-%EC%9C%88%EB%8F%84%EC%9A%B0-%ED%95%A8%EC%88%98-6%EA%B0%80%EC%A7%80-%EC%95%8C%EC%95%84%EB%B3%B4%EA%B8%B0) : `RANK()`, `DENSE_RANK()`, `ROW_NUMBER()`, `LEAD()`, `LAG()`ㅤ)
 <p>: 순위 구하기</p>
