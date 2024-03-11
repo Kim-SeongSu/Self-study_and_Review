@@ -384,30 +384,12 @@ mysql -h ndsap -u root -p DB_test < DB_test_mysqldump.sql
 </details><br><br><br>
 
 
-
-
 <br><br><br>
 </details><br>
-
-
-
-
-
-
-
-
-
 
 ## 2. SQL 타입
 <details><summary>ㅤ</summary>
 <br>
-
-
-
-
-
-
-
 
 
 <!--
@@ -435,14 +417,7 @@ mysql -h ndsap -u root -p DB_test < DB_test_mysqldump.sql
 </details><br><br><br>
 -->
 
-
-
-
-
-
 </details><br>
-
-
 
 
 ## 3. SQL 함수
@@ -1095,6 +1070,35 @@ SELECT
 FROM Transactions
 GROUP BY 1, 2
 ```
+</details><br><br><br>
+
+
+> **`LAG`** / **`LEAD`**
+<p>: 컬럼의 열을 N칸 아래로 미루기 / 컬럼의 열을 N칸 위로 올리기</p>
+
+```MySQL
+LAG([필드값], [N], [null 값 대체값])
+LEAD([필드값], [N], [null 값 대체값])
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+with cnt as(
+    select num,
+           lag(num,1) over() bef,
+           lead(num,1) over() aft
+    from Logs
+)
+
+select distinct num ConsecutiveNums 
+from cnt 
+where num=bef and num=aft
+```
+<br>
+<div align='center'>
+    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FpfahR%2FbtrAJSHbCXn%2FOkpyoma4bbzj30wlcHdUgk%2Fimg.png"/>
+</div>
+
 </details><br><br><br>
 
 
