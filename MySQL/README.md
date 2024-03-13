@@ -1102,6 +1102,32 @@ where num=bef and num=aft
 </details><br><br><br>
 
 
+> **`LEFT`** / **`RIGHT`** / **`MID`** / **`SUBSTRING`**
+<p>: 문자열 자르기</p>
+
+```MySQL
+LEFT([필드값],[가져올 문자 길이])  # PostgreSQL 한정 음수(-)값 사용 가능
+SUBSTRING([필드값], [가져올 문자 시작 위치], [문자 길이])  # SUBSTR과 동일, MySQL의 MID와 같음 / 문자 길이 미 입력 시, 시작 위치 ~ 끝 출력
+RIGHT([필드값],[가져올 문자 길이]) # PostgreSQL 한정 음수(-)값 사용 가능
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+# MySQL
+select user_id, concat(upper(left(name,1)),lower(substring(name,2))) name
+from Users
+order by 1
+
+# PostgreSQL
+select user_id, concat(upper(left(name,1)),lower(right(name,-1))) name
+from Users
+order by 1
+```
+</details><br><br><br>
+
+
+
+
 
 <!--
 > **`ORDER BY`**
