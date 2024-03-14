@@ -467,6 +467,20 @@ WHERE ANIMAL_TYPE = 'Cat' OR ANIMAL_TYPE = 'Dog'
 GROUP BY ANIMAL_TYPE 
 ORDER BY ANIMAL_TYPE
 ```
+<br>
+
+**- GROUP BY 연계 함수**
+
+|Name|Description|Name|Description|
+|:--:|:--:|:--:|:--:|
+|**AVG**|Return the average value of the argument|**SUM**|Return the sum|
+|**MIN**|Return the minimum value|**MAX**|Return the maximum value|
+|**COUNT**|Return a count of the number of rows returend|**GROUP_CONCAT**|Return a concatenated string|
+|**STD** or STDDEV or STDDEV_POP|Return the population standard deviation|STDDEV_SAMP|Return the sample standard deviation|
+|BIT_AND|Return bitwise and|BIT_OR|Return bitwise or|
+|**VARIANCE** or  VAR_POP|Return the population standard variance|VAR_SAMP|Return the sample variance|
+|BIT_XOR|Return bitwise xor|||
+
 </details><br><br><br>
 
 
@@ -484,16 +498,19 @@ SELECT COUNT(DISTINCT NAME) AS CNT FROM ANIMAL_INS WHERE NOT ISNULL(NAME)
 </details><br><br><br>
 
 
-> **`LIMIT`**
-<p>: 상위 n개 값 추출</p>
+> **`LIMIT`** / **`OFFSET`**
+<p>: Paging (원하는 위치의 원하는 갯수의 데이터 가져오기)</p>
 
 ```MySQL
-LIMIT [n]
+LIMIT [n] OFFSET [n]
 ```
 <details><summary>예시 보기</summary>
 
 ``` MySQL
-SELECT NAME FROM ANIMAL_INS ORDER BY DATETIME LIMIT 1
+SELECT NAME
+FROM ANIMAL_INS
+ORDER BY DATETIME
+LIMIT 3 OFFSET 5   # 5부터 3개의 데이터 가져오기
 ```
 </details><br><br><br>
 
@@ -502,7 +519,7 @@ SELECT NAME FROM ANIMAL_INS ORDER BY DATETIME LIMIT 1
 <p>: 평균값 구하기</p>
 
 ```MySQL
-AVG([필드값])
+AVG([필드명])
 ```
 <details><summary>예시 보기</summary>
 
@@ -516,7 +533,7 @@ SELECT ROUND(AVG(DAILY_FEE)) AS AVERAGE_FEE FROM CAR_RENTAL_COMPANY_CAR WHERE CA
 <p>: 빈값찾기</p>
 
 ```MySQL
-ISNULL([필드값], [NULL일 경우 대체할 값])
+ISNULL([필드명], [NULL일 경우 대체할 값])
 ```
 <details><summary>예시 보기</summary>
 
@@ -531,10 +548,10 @@ SELECT ANIMAL_ID FROM ANIMAL_INS WHERE ISNULL(NAME)
 
 ```MySQL
 # MySQL 함수
-IFNULL([필드값],[대체할 값])
+IFNULL([필드명],[대체할 값])
 
 # 표준 SQL 함수
-COALESCE([필드값1],[필드값2],,...,[필드값n])   #필드값1이 NULL이면 필드값2가, 필드값2가 NULL이라면 필드값3가 반환되는 형식
+COALESCE([필드명1],[필드명2],,...,[필드명n])   #필드명1이 NULL이면 필드명2가, 필드명2가 NULL이라면 필드명3가 반환되는 형식
 ```
 <details><summary>예시 보기</summary>
 
@@ -553,10 +570,10 @@ SELECT name FROM Customer WHERE COALESCE(referee_id, 0) != 2
 
 ```MySQL
 # MySQL
-DATE_FORMAT([필드값],입력 형식)
+DATE_FORMAT([필드명],입력 형식)
 
 # PostgreSQL
-TO_CHAR([필드값],입력 형식)
+TO_CHAR([필드명],입력 형식)
 ```
 <details><summary>예시 보기</summary>
 
@@ -635,10 +652,10 @@ ORDER BY AVERAGE_DURATION DESC , CAR_ID DESC
 
 ```MySQL
 # MySQL
-DATE_ADD([필드값], 숫자)
+DATE_ADD([필드명], 숫자)
 
 #PostgreSQL
-[필드값] + 또는 - INTERVAL '숫자   날짜 형식'
+[필드명] + 또는 - INTERVAL '숫자   날짜 형식'
 ```
 <details><summary>예시 보기</summary>
 
@@ -662,8 +679,8 @@ WHERE (player_id, event_date - INTERVAL '1 DAY') IN (SELECT player_id, MIN(event
 <p>: 여러 조건에 맞게 값 변경하기</p>
 
 ```MySQL
-CASE WHEN [필드값] [조건] THEN [대체값1]
-     WHEN [필드값] [조건] THEN [대체값2]
+CASE WHEN [필드명] [조건] THEN [대체값1]
+     WHEN [필드명] [조건] THEN [대체값2]
      ...
      ELSE [대체값n] END
 ```
@@ -712,7 +729,7 @@ CONCAT(문자열1, 문자열2,...,문자열n)
 CONCAT_WS('구분자', 문자열1, 문자열2,...,문자열n)
 
 # 그룹핑하여 추출한 문자열 합치기
-GROUP_CONCAT( (distinct) 필드값 (order by ~) (SEPARATOR '구분자') ) 
+GROUP_CONCAT( (distinct) 필드명 (order by ~) (SEPARATOR '구분자') ) 
 ```
 <details><summary>예시 보기</summary>
 
@@ -736,6 +753,33 @@ GROUP BY B.WRITER_ID HAVING COUNT(B.BOARD_ID) > 2
 ORDER BY B.WRITER_ID DESC
 ```
 </details><br><br><br>
+
+
+> **`GROUP_CONCAT`** / **`STRING_AGG`** / **`ARRAY_AGG`** 
+<p>: 그룹화 된 컬럼값들을 지정자로 구분하여 합침</p>
+
+```MySQL
+# MySQL
+GROUP_CONCAT((distinct) [필드명] (separator '구분자') (order by 필드명))  # default 구분자는 ','
+   									   GROUP_CONCAT([필드명], '구분자' order by [필드명])으로 사용해도 됨. (구분자와 order by 사이에 콤마(,) 없음!!)
+
+#PostgreSQL
+STRING_AGG((distinct) [필드명] ,'구분자' (order by 필드명))  				# STRING_AGG는 구분자(seperator) 필수 지정
+ARRAY_AGG((distinct) [필드명] (,'구분자') (order by 필드명))
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+# MySQL
+select sell_date, count(distinct product) num_sold, group_concat(distinct product) products
+# PostgreSQL
+select sell_date, count(distinct product) num_sold, string_agg(distinct product, ',') products
+from Activities
+group by sell_date
+order by 1
+```
+</details><br><br><br>
+
 
 > **`BETWEEN`**
 <p>: 특정 범위 지정 구문</p>
@@ -947,30 +991,6 @@ ORDER BY 날짜
 
 </details><br><br><br>
 
-> **`RANK`** ㅤㅤ(ㅤ[Window Function](https://kimsyoung.tistory.com/entry/%EB%8C%80%ED%91%9C%EC%A0%81%EC%9D%B8-%EC%9C%88%EB%8F%84%EC%9A%B0-%ED%95%A8%EC%88%98-6%EA%B0%80%EC%A7%80-%EC%95%8C%EC%95%84%EB%B3%B4%EA%B8%B0) : `RANK()`, `DENSE_RANK()`, `ROW_NUMBER()`, `LEAD()`, `LAG()`ㅤ)
-<p>: 순위 구하기</p>
-
-```MySQL
-rank() over (ORDER BY 컬럼명)
-```
-<details><summary>예시 보기</summary>
-
-``` MySQL
-SELECT MP.MEMBER_NAME, RR.REVIEW_TEXT, LEFT(RR.REVIEW_DATE,10) REVIEW_DATE
-FROM REST_REVIEW RR
-    LEFT JOIN MEMBER_PROFILE MP
-    ON RR.MEMBER_ID = MP.MEMBER_ID
-WHERE RR.MEMBER_ID in (
-    SELECT RRRank.MEMBER_ID
-    FROM (SELECT MEMBER_ID, rank() over (ORDER BY count(MEMBER_ID) DESC) ranking   # over
-          FROM REST_REVIEW
-          GROUP BY MEMBER_ID
-         ) RRRank
-    WHERE RRRank.ranking = 1)
-ORDER BY 3, 2
-```
-</details><br><br><br>
-
 
 > **`WITH`**  (CTE; Common Table Expression)
 <p>: 메모리 상에 가상의 테이블 저장</p>
@@ -1055,7 +1075,7 @@ SELECT BIN(10)
 <p>: 하나의 SELECT 문에서 다른 조건을 갖는 COUNT를 여러개 구하기 (PostgreSQL)</p>
 
 ```PostgreSQL
-COUNT([필드값]) FILTER(WHERE 조건)
+COUNT([필드명]) FILTER(WHERE 조건)
 ```
 <details><summary>예시 보기</summary>
 
@@ -1073,12 +1093,88 @@ GROUP BY 1, 2
 </details><br><br><br>
 
 
+> **`LEFT`** / **`RIGHT`** / **`MID`** / **`SUBSTRING`**
+<p>: 문자열 자르기</p>
+
+```MySQL
+LEFT([필드명],[가져올 문자 길이])   			# PostgreSQL 한정 음수(-)값 사용 가능
+SUBSTRING([필드명], [가져올 문자 시작 위치], [문자 길이])  # SUBSTR과 동일, MySQL의 MID와 같음 / 문자 길이 미 입력 시, 시작 위치 ~ 끝 출력
+RIGHT([필드명],[가져올 문자 길이]) 			# PostgreSQL 한정 음수(-)값 사용 가능
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+# MySQL
+select user_id, concat(upper(left(name,1)),lower(substring(name,2))) name
+from Users
+order by 1
+
+# PostgreSQL
+select user_id, concat(upper(left(name,1)),lower(right(name,-1))) name
+from Users
+order by 1
+```
+</details><br><br><br>
+
+
+
+
+<!--
+> **`ORDER BY`**
+<p>: 정렬하기</p>
+
+```MySQL
+
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+
+```
+</details><br><br><br>
+-->
+
+
+## 4. SQL Window 함수
+
+- 윈도우 함수는 테이블 내부에 `윈도우 프레임`이라고 부르는 범위를 정의하고, 해당 범위 내에 포함된 값을 자유롭게 사용하는 함수.
+- 여러 행을 합쳐 1개의 행으로 만드는 'GROUP BY'와는 달리 **기존의 값은 그대로 두고 추가적인 집계 가능**
+- `RANK()`, `DENSE_RANK()`, `ROW_NUMBER()`, `LEAD()`, `LAG()` 등이 있다.
+> [참고하면 좋은 사이트](https://kimsyoung.tistory.com/entry/%EB%8C%80%ED%91%9C%EC%A0%81%EC%9D%B8-%EC%9C%88%EB%8F%84%EC%9A%B0-%ED%95%A8%EC%88%98-6%EA%B0%80%EC%A7%80-%EC%95%8C%EC%95%84%EB%B3%B4%EA%B8%B0)
+
+<br><br><br>
+
+> **`RANK`**
+<p>: 순위 구하기</p>
+
+```MySQL
+rank() over (ORDER BY 컬럼명)
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+SELECT MP.MEMBER_NAME, RR.REVIEW_TEXT, LEFT(RR.REVIEW_DATE,10) REVIEW_DATE
+FROM REST_REVIEW RR
+    LEFT JOIN MEMBER_PROFILE MP
+    ON RR.MEMBER_ID = MP.MEMBER_ID
+WHERE RR.MEMBER_ID in (
+    SELECT RRRank.MEMBER_ID
+    FROM (SELECT MEMBER_ID, rank() over (ORDER BY count(MEMBER_ID) DESC) ranking   # over
+          FROM REST_REVIEW
+          GROUP BY MEMBER_ID
+         ) RRRank
+    WHERE RRRank.ranking = 1)
+ORDER BY 3, 2
+```
+</details><br><br><br>
+
+
 > **`LAG`** / **`LEAD`**
 <p>: 컬럼의 열을 N칸 아래로 미루기 / 컬럼의 열을 N칸 위로 올리기</p>
 
 ```MySQL
-LAG([필드값], [N], [null 값 대체값])
-LEAD([필드값], [N], [null 값 대체값])
+LAG([필드명], [N], [null 값 대체값])
+LEAD([필드명], [N], [null 값 대체값])
 ```
 <details><summary>예시 보기</summary>
 
@@ -1102,44 +1198,43 @@ where num=bef and num=aft
 </details><br><br><br>
 
 
-> **`LEFT`** / **`RIGHT`** / **`MID`** / **`SUBSTRING`**
-<p>: 문자열 자르기</p>
+> **`RANGE`** & **`ROWS`**
+<p>: 필드값 선택 범위 설정 (WHERE 절 같은 역할!!)</p>
 
 ```MySQL
-LEFT([필드값],[가져올 문자 길이])  # PostgreSQL 한정 음수(-)값 사용 가능
-SUBSTRING([필드값], [가져올 문자 시작 위치], [문자 길이])  # SUBSTR과 동일, MySQL의 MID와 같음 / 문자 길이 미 입력 시, 시작 위치 ~ 끝 출력
-RIGHT([필드값],[가져올 문자 길이]) # PostgreSQL 한정 음수(-)값 사용 가능
+RANGE [범위] : 컬럼값 기준으로 범위 설정 
+ROWS [범위]  : 행 기준으로 범위 설정
 ```
-<details><summary>예시 보기</summary>
 
-``` MySQL
-# MySQL
-select user_id, concat(upper(left(name,1)),lower(substring(name,2))) name
-from Users
-order by 1
+<br><br><br>
 
-# PostgreSQL
-select user_id, concat(upper(left(name,1)),lower(right(name,-1))) name
-from Users
-order by 1
-```
-</details><br><br><br>
-
-
-
-
-
-<!--
-> **`ORDER BY`**
-<p>: 정렬하기</p>
+> **`(UNBOUNDED) PRECEDING`** / **`(UNBOUNDED) FOLLOWING`** / **`CURRENT ROW`**
+<p>: 그룹별로 누적된 값 구하기 + 범위 제한</p>
 
 ```MySQL
+PRECEDING : 현재 행까지
+FOLLOWING : 현재 행부터
+CURRENT ROW : 현재 행
+UNBOUNDED PRECEDING/FOLLOWING : 처음부터 현재 행까지 / 현재 행부터 끝 까지
+N PRECEDING/FOLLOWING : 현재 행으로부터 -N개 행 / 현재 행으로부터 +N개 행
 
 ```
 <details><summary>예시 보기</summary>
 
 ``` MySQL
+with Dist_C as(
+    select visited_on, sum(amount) Amt
+    from Customer
+    group by visited_on
+    order by 1)
 
+select visited_on, amount, average_amount
+from(
+    select  visited_on, 
+            sum(Amt) over (order by visited_on rows between 6 preceding and current row) amount,
+            round(avg(Amt) over (order by visited_on rows between 6 preceding and current row),2) average_amount
+    from Dist_C) A
+where DATE_ADD(visited_on, INTERVAL -6 DAY) in (select visited_on from Dist_C)
+order by 1
 ```
 </details><br><br><br>
--->
