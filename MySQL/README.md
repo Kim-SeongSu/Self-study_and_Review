@@ -445,6 +445,19 @@ ORDER BY SALES DESC, PRODUCT_CODE
 </details><br><br><br>
 
 
+> **`Alias`**
+<p>: 별칭 부여하기</p>
+
+```MySQL
+# SELECT, FROM의 필드명 또는 SubQuery 뒤에 사용
+[컬럼명 / SubQuery] (AS) [별칭]
+
+* WHERE 절에는 사용불가
+* 별칭에 공백, 특수문자, 대문자를 입력하기 위해서는 큰따옴표(" ") 안에 입력해야 함! (작은 따옴표 X)
+```
+<br><br><br>
+
+
 > **`GROUP BY`**
 <p>: 그룹화 하기</p>
 
@@ -602,7 +615,6 @@ GROUP BY 1, 2
 ```
 
 <div align = 'center'>
-
 
 |format type|MySQL|PostgreSQL|format type|MySQL|PostgreSQL|
 |:--:|:--:|:--:|:--:|:--:|:--:|
@@ -807,7 +819,7 @@ GROUP BY P.product_id
 # SQL 표준 함수
 CAST([변환할 값] AS [데이터형식])
 
-# postgreSQL 함수
+# PostgreSQL 함수
 :: [데이터 형식]
 ```
 <details><summary>예시 보기</summary>
@@ -816,7 +828,7 @@ CAST([변환할 값] AS [데이터형식])
 SELECT P.product_id, COALESCE(ROUND(cast(sum(P.price * U.units) as numeric) /sum(U.units),2),0) AS average_price
 
 /*
-- postgreSQL의 경우,
+- PostgreSQL의 경우,
 SELECT P.product_id, COALESCE(ROUND(sum(P.price * U.units :: numeric) /sum(U.units),2),0) AS average_price
 로 간략하게 표현 가능
 */
@@ -1117,22 +1129,52 @@ order by 1
 </details><br><br><br>
 
 
-
-
-<!--
-> **`ORDER BY`**
-<p>: 정렬하기</p>
+> **`REGEXP`**
+<p>: POSIX Regular Expression (Pattern Matching), 정규 표현식</p>
 
 ```MySQL
+# MySQL
+[필드명 / '문자열'] REGEXP '정규 표현식'
 
+# PostgreSQL
+[필드명 / '문자열'] ~    (완벽하게 일치하는 내용 포함)     '정규 표현식'
+		   ~*   (어느 정도 일치하는 내용 포함)    '정규 표현식'
+		   !~   (완벽하게 일치하는 내용 미 포함)  '정규 표현식'
+		   !~*  (어느 정도 일치하는 내용 미 포함) '정규 표현식'
 ```
 <details><summary>예시 보기</summary>
 
 ``` MySQL
+# MySQL
+select *
+from Users U
+where mail regexp '^[A-Za-z][A-Za-z0-9_.-]*@leetcode\\.com$'
 
+# PostgreSQL
+select *
+from Users U
+where mail ~ '^[A-Za-z][A-Za-z0-9.\_\-]*@leetcode.com'
 ```
+
+**- 자주 사용하는 정규 표현식 문법**
+
+|Pattern|Description|Pattern|Description|
+|:--:|:--:|:--:|:--:|
+|**^패턴**|해당 패턴으로 시작|**패턴$**|해당 패턴으로 끝|
+|**패턴.**|해당 자리에 모든 문자 입력 가능|**문자1\|문자2**|or 역할, 앞-뒤 문자 중 하나|
+|**\\문자**|\\다음으로 오는 문자를 일반 문자 취급|||
+|**패턴?**|? 바로 앞의 문자가 0~1회 일치|**패턴+**|+ 바로 앞의 문자가 1회 이상 일치|
+|**패턴\***|\* 바로 앞의 문자가 0회 이상 일치|**패턴{N}**|앞 문자 x N개 만큼 일치|
+|**패턴{N,M}**|앞 문자 x N개 ~ 앞 문자 x M개 만큼 일치|||
+|**[0-9]**|숫자, [:digit:]로 표현하기도 함|**[a-zA-Z]**|알파벳 소문자 및 대문자|
+|**[특수문자]**|특수문자 입력 시, \특수문자 형태로 입력|||
+
+[참고하면 좋은 사이트](https://ssseung.tistory.com/170)
+
 </details><br><br><br>
--->
+
+
+
 
 
 ## 4. SQL Window 함수
@@ -1144,11 +1186,15 @@ order by 1
 
 <br><br><br>
 
-> **`RANK`**
+> **`RANK`** / **`DENSE_RANK`**
 <p>: 순위 구하기</p>
 
 ```MySQL
-rank() over (ORDER BY 컬럼명)
+# 불연속적 공동 순위 표기  ex) 1 1 3 4 
+rank() over (PARTITION BY [컬럼명] ORDER BY [컬럼명])  # PARTITION BY ORDER BY 순서 유의
+
+# 연속적 공동 순위 표기    ex) 1 1 2 3
+dense_rank() over (PARTITION BY [컬럼명] ORDER BY [컬럼명])
 ```
 <details><summary>예시 보기</summary>
 
@@ -1238,3 +1284,26 @@ where DATE_ADD(visited_on, INTERVAL -6 DAY) in (select visited_on from Dist_C)
 order by 1
 ```
 </details><br><br><br>
+
+
+
+
+
+
+
+
+
+<!--
+> **`ORDER BY`**
+<p>: 정렬하기</p>
+
+```MySQL
+
+```
+<details><summary>예시 보기</summary>
+
+``` MySQL
+
+```
+</details><br><br><br>
+-->
