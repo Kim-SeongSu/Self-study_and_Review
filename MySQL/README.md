@@ -26,9 +26,9 @@
 <p>: 데이터베이스 오브젝트 생성</p>
 
 ```MySQL
-# CREATE DATABASE [데이터베이스명];
+CREATE DATABASE [데이터베이스명];
 
-# CREATE TABLE [테이블명](
+CREATE TABLE [테이블명](
 [필드명1] [자료형(크기)] NOT NULL AUTO_INCREMENT,
 [필드명2] [자료형(크기)] NOT NULL,
 [필드명3] [자료형(크기)] );
@@ -53,15 +53,15 @@ CREATE TABLE emp_table
 <p>: 데이터베이스 오브젝트 변경</p>
 
 ```MySQL
-# ALTER TABLE [테이블명] RENAME [새 테이블명];
+ALTER TABLE [테이블명] RENAME [새 테이블명];
 
-# ALTER TABLE [테이블명] MODIFY COLUMN [필드명] [새 필드타입];
+ALTER TABLE [테이블명] MODIFY COLUMN [필드명] [새 필드타입];
 
-# ALTER TABLE [테이블명] CHANGE COLUMN [필드명] [새 필드명] [새 필드타입];
+ALTER TABLE [테이블명] CHANGE COLUMN [필드명] [새 필드명] [새 필드타입];
 
-# ALTER TABLE [테이블명] ADD COLUMN [필드명] [필드타입];
+ALTER TABLE [테이블명] ADD COLUMN [필드명] [필드타입];
 
-# ALTER TABLE [테이블명] DROP COLUMN [필드명];
+ALTER TABLE [테이블명] DROP COLUMN [필드명];
 ```
 
 <details><summary>예시 보기</summary>
@@ -84,9 +84,9 @@ ALTER TABLE ex_table DROP COLUMN ex_column;
 <p>: 데이터베이스 오브젝트 삭제</p>
 
 ```MySQL
-# DROP DATABASE [데이터베이스명];
+DROP DATABASE [데이터베이스명];
 
-# DROP TABLE [테이블명];
+DROP TABLE [테이블명];
 ```
 
 <details><summary>예시 보기</summary>
@@ -107,7 +107,7 @@ DROP user '사용자ID'@localhost;
 <p>: 데이터베이스 오브젝트의 내용 삭제</p>
 
 ```MySQL
-# TRUNCATE TABLE [테이블명];
+TRUNCATE TABLE [테이블명];
 ```
 
 <details><summary>예시 보기</summary>
@@ -141,7 +141,7 @@ TRUNCATE TABLE test_1
 <p>: 테이블의 내용을 조회</p>
 
 ```MySQL
-# SELECTE [필드명] FROM [테이블명];
+SELECT [필드명] FROM [테이블명];
 ```
 
 <details><summary>예시 보기</summary>
@@ -162,11 +162,11 @@ SELECT [필드명1], [필드명2], ... FROM [테이블명] WHERE [필드명]=[�
 <p>: 삽입 형태로 신규 데이터를 테이블에 저장</p>
 
 ```MySQL
-# INSERT INTO [테이블명]([필드명1], [필드명2], ...)
-   VALUES ([데이터값1], [데이터값2], ...);
+INSERT INTO [테이블명]([필드명1], [필드명2], ...)
+VALUES ([데이터값1], [데이터값2], ...);
 
-# INSERT INTO [테이블명]
-   VALUES ([데이터값1], [데이터값2], [데이터값3], ...);
+INSERT INTO [테이블명]
+VALUES ([데이터값1], [데이터값2], [데이터값3], ...);
 ```
 
 <details><summary>예시 보기</summary>
@@ -189,9 +189,9 @@ INSERT INTO Reservation(ID, Name) VALUES (3, '김유신');
 <p>: 데이터의 내용을 수정</p>
 
 ```MySQL
-# UPDATE [테이블명]
-SET [조건 필드명1]=[조건값1], [조건 필드명2]=[조건값2], ...
-WHERE [업데이트 하고싶은 필드명]=[업데이트 할 데이터값];
+UPDATE [테이블명]
+SET [업데이트 하고싶은 필드명1]=[업데이트 할 데이터값1], [업데이트 하고싶은 필드명2]=[업데이트 할 데이터값2], ...
+WHERE [조건 필드명1]=[조건값1] and [조건 필드명2]=[조건값2] and ...;
 ```
 
 <details><summary>예시 보기</summary>
@@ -205,6 +205,7 @@ WHERE Name = '이순신';
 # 예제 2
 UPDATE Reservation
 SET RoomNum = 1592;
+
 ```
 [ 출력결과 1]
 |ID|Name|ReserveDate|RoomNum|
@@ -222,13 +223,22 @@ SET RoomNum = 1592;
 |2|김유신|2002-03-10|1592|
 |3|이순신|2024-02-01|1592|
 
+<br><br>
+
+```MySQL
+# leetcode 문제 예제
+update Salary 
+set sex = case sex when 'm' then 'f' else 'm' end
+```
+
+
 </details><br><br><br>
 
 > **`DELETE`**  ( DML 명령어 - **데이터 삭제** )
 <p>: 테이블의 내용을 삭제</p>
 
 ```MySQL
-# DELETE FROM [테이블명] WHERE [필드명]=[조건값];
+DELETE FROM [테이블명] WHERE [필드명]=[조건값];
 ```
 
 <details><summary>예시 보기</summary>
@@ -257,7 +267,7 @@ DELETE FROM Reservation       (= TRUNCATE TABLE Reservation)
 <p>: 데이터베이스 사용자에게 권한 부여</p>
 
 ```MySQL
-# GRANT [권한 범위] PRIVILEGES ON [DB명].[테이블명] TO [사용자ID@localhost];
+GRANT [권한 범위] PRIVILEGES ON [DB명].[테이블명] TO [사용자ID@localhost];
 ```
 
 <details><summary>예시 보기</summary>
@@ -276,7 +286,7 @@ GRANT ALL PRIVILEGES ON *.* TO test_user@localhsost with grant option;
 <p>: 데이터베이스 사용자에게 권한 회수</p>
 
 ```MySQL
-# REVOKE [권한 범위] ON [DB명].[테이블명] TO [사용자ID@localhost];
+REVOKE [권한 범위] ON [DB명].[테이블명] TO [사용자ID@localhost];
 ```
 
 <details><summary>예시 보기</summary>
@@ -303,27 +313,27 @@ REVOKE ALL ON *.* FROM 'root'@localhost;
 <p>: 사용할 데이터베이스를 선택하는 명령어</p>
 
 ```MySQL
-# USE [데이터베이스명];
+USE [데이터베이스명];
 ```
 <br><br>
 > **`SHOW`**
 <p>: 모든 DB 또는 TABLE을 보여주는 명령어</p>
 
 ```MySQL
-# SHOW DATABASES;
+SHOW DATABASES;
 
-# SHOW TABLES;
+SHOW TABLES;
 ```
 <br><br>
 > **`DESC`**
 <p>: TABLE의 구조를 보는 명령어</p>
 
 ```MySQL
-# DESC [테이블명];
+DESC [테이블명];
 
-# DESCRIBE [테이블명];
+DESCRIBE [테이블명];
 
-# EXPLAIN [테이블명];
+EXPLAIN [테이블명];
 ```
 <br><br>
 > **`SQL dump & import`**
