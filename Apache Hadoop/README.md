@@ -49,61 +49,65 @@ Base Apache Hadoop framework로는 하둡 커먼(Hadoop Common), **하둡 분산
 - **NameNode** (네임노드)
 
 네임노드에 장애가 생겨 가지고 있던 메타 데이터를 잃게 된다면, 데이터 노드에 데이터가 온전히 저장되어 있어도 데이터를 불러올 수 없다. 
-이를 `SPOF(Single Point Of Failure)`라고 하며 이를 방지하고자 `HA(High Availability)`를 적용한다. <br>
+이를 `SPOF(Single Point Of Failure)`라고 하며 이를 방지하고자 `HA(High Availability)`를 적용한다. <br><br>
 
-  - **역할 1. 메타 데이터 관리** <br>
+ㅤㅤ- **역할 1. 메타 데이터 관리** <br>
   ```md
   1) fsimage 파일을 메모리에 로딩
       - dfs.namenode.name.dir 경로와 디스크에 저장됨.
       - 파일 권한(Permission), 파일 접근 시간 (atime; access time), HDFS 파일 위치, HDFS 블록 메타정보를 기록함.
-    * fsimage : 특정 시점의 HDFS 메타 데이터에 대한 스냅샷(SnapShot) 파일 (= 가장 최근의 체크포인트가 적용된 메타 데이터)
+    * fsimage: 특정 시점의 HDFS 메타 데이터에 대한 스냅샷(SnapShot) 파일 (= 가장 최근의 체크포인트가 적용된 메타 데이터)
 
   2) edits log를 fsimage에 적용 (=체크포인팅)
       - dfs.journalnode.edits.dir 경로와 디스크에 저장
     * edits log: 마지막 체크포인팅 이후의 변경 사항을 기록하는 로그
-        | active namenode  : 저널 노드에 edits로그 입력 가능
-        | standby namenode : 저널 노드에서 edits로그를 읽어 주기적으로 체크포인팅 수행 >> 결과 fsimage active namenode에 전달
+        | active namenode : 저널 노드에 edits로그 입력 가능
+        | standby namenode: 저널 노드에서 edits로그를 읽어 주기적으로 체크포인팅 수행 >> 결과 fsimage active namenode에 전달
 
-  3) DataNode로 부터 블록 위치를 받고, 갖고 있는 블록 메타 정보와 매핑
-      - 주기적으로 데이터 노드로 부터 블록 리포트(블록 위치 정보) 제공 받음
+  3) DataNode로부터 블록 위치를 받고, 갖고 있는 블록 메타 정보와 매핑
+      - 주기적으로 데이터 노드로부터 블록 리포트(블록 위치 정보) 제공 받음
       - 따로 디스크에 저장하지 않고 메모리에만 저장
   ```
+<br>
 
-
-<!--
-      *체크포인트(checkpoint)
-      : edits 파일은 별도의 크기 제한이 없기 때문에 너무 크기가 커질 경우, 
-        메모리에 edits 로그에 기록된 변경 이력을 적용할 때 너무 긴 시간이 소요된다. 
-        이를 방지하고자 Standby NameNode에서 주기적으로 변경된 edits 로그 파일을 fsimage에 갱신하는 작업을 말한다.
--->
-
-
-  - **역할 2. 데이터 노드 및 블록 관리** <br>
+ㅤㅤ- **역할 2. 데이터 노드 및 블록 관리** <br>
   ```md
-  
+  1) datanode가 주기적으로 전달하는 Heartbeat(3초)와 Blockreport(6시간)을 이용하여 datanode의 동작 및 블록 상태를 관리한다.
+    * Heartbeat: 디스크 가용공간, 데이터 이동, 적재량 등의 정보를 의미.
+                 3초 마다 Active/Standby nn에 hearthbeat를 전송하고, 만약 10초 이상 입력받지 못한다면 해당 데이터 노드를
+                 죽은 것으로 처리하고 다른 데이터 노드에 블록 복제 명령.
+    * Blockreport: datanode에 저장된 블록의 목록과 각 블록별 로컬디스크에서의 저장 위치에 대한 정보.
   ```
-  - **역할 3. 클라이언트 요청 받기** <br>
+<br>
+
+ㅤㅤ- **역할 3. 클라이언트 요청 받기** <br>
   ```md
-  
+  1) hive 등의 client가 HDFS 데이터에 최초 접근 시, nn(active)와 연결 됨.
+        | 쓰기 작업 요청의 경우, 블록을 저장할 수 있는 3개의 데이터노드 주소 제공
+        | 읽기 작업 요청의 경우, 해당 내용을 갖는 블록이 저장된 데이터노드의 주소 제공
+     이후 nn를 거치지 않고 client-datanode 간의 직접 통신
   ```
-  - **역할 4. edits log 쓰기** <br>
-  ```md
-  
-  ```
+<br><br>
   
 - **DataNode** (데이터 노드)
 
 - **JournalNode** (저널노드)
+
+ㅤㅤ- **네임노드들의 공유스토리지** (active: edits log 기록, standby: edit log 읽기) <br>
+ㅤㅤ- **3개 이상의 홀수로 구성** (과반수의 저널노드가 동작중이어야 edit log를 fsimage에 반영 가능하기 때문) <br>
+ㅤㅤ- 리소스를 적게 사용하기 때문에 nn, JobTracker, ResourceManager 같은 데몬이 돌아가는 서버에서 실행 가능  <br>
 
 - **Zookeeper (QPM; QuorumPeerMain)** (주키퍼)
 
 - **ZKFC (ZookeeperFailoverController)** (주키퍼 장애 복구 컨트롤러)
   
 <!--
+# 참고자료 링크
 https://velog.io/@jochedda/%ED%95%98%EB%91%A1Hadoop%EC%9D%B4%EB%9E%80 <br>
 https://it-sunny-333.tistory.com/42 <br>
 https://eyeballs.tistory.com/251 <br>
 https://dabingk.tistory.com/6?category=753767 <br>
+https://velog.io/@dobby/Hadoop-Ver.1-Ver.2-%EC%A0%95%EB%A6%AC <br>
 -->
 
 <br><br><br>
