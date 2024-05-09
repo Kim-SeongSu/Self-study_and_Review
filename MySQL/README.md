@@ -13,7 +13,6 @@
 
 ## 1. SQL 명령어 
 
-
 ### 1) 데이터 정의어 (DDL, Data Definition Language)
 -  데이터베이스나 테이블 등을 생성, 삭제하거나 그 구조를 변경하기 위한 명령어
 -  데이터베이스를 정의하거나 수정
@@ -259,7 +258,7 @@ DELETE FROM Reservation       (= TRUNCATE TABLE Reservation)
   -   무결성을 유지시키면서 내부적으로 여러가지 규정이나 제약조건 등을 기술하기 위해 사용되는 명령어
   -   사용자 별로 데이터베이스에 접근할 수 있는 권한을 부여하거나 회수 
 
-<details><summary>ㅤGRANTㅤ|ㅤREVOKE</summary>
+<details><summary>ㅤGRANTㅤ|ㅤREVOKEㅤ|ㅤCOMMITㅤ|ㅤROLLBACK   </summary>
 
 <br>
 
@@ -299,8 +298,21 @@ REVOKE ALL ON *.* FROM 'root'@localhost;
 
 </details><br><br><br>
 
+> **`COMMIT`**
+<p>: 트랜잭션의 작업이 정상적으로 완료되었음을 알림</p>
 
+```MySQL
+COMMIT;
+```
 <br><br><br>
+
+> **`ROLLBACK`**  
+<p>: 트랜잭션의 작업이 비정상적으로 종료 되었을 때 원래의 상태로 복구</p>
+
+```MySQL
+ROLLBACK;
+```
+<br><br>
 </details><br>
 
 
@@ -397,40 +409,7 @@ mysql -h ndsap -u root -p DB_test < DB_test_mysqldump.sql
 <br><br><br>
 </details><br>
 
-## 2. SQL 타입
-<details><summary>ㅤ</summary>
-<br>
-
-
-<!--
-> **``**  (  **데이터 삽입** )
-<p>: </p>
-
-```MySQL
-#    [테이블명][DB명][필드명]
-
-```
-
-<details><summary>예시 보기</summary>
-
-``` MySQL
-
-```
-[ 출력결과 ]
-|ID|Name|ReserveDate|RoomNum|
-|--|--|--|--|
-|1|이순신|2016-02-16|1108|
-|3|김유신|NULL|NULL|
-
-[참고 링크]()
-
-</details><br><br><br>
--->
-
-</details><br>
-
-
-## 3. SQL 함수
+## 2. SQL 함수
 
 <br>
 
@@ -1187,7 +1166,7 @@ where mail ~ '^[A-Za-z][A-Za-z0-9.\_\-]*@leetcode.com'
 
 
 
-## 4. SQL Window 함수
+## 3. SQL Window 함수
 
 - 윈도우 함수는 테이블 내부에 `윈도우 프레임`이라고 부르는 범위를 정의하고, 해당 범위 내에 포함된 값을 자유롭게 사용하는 함수.
 - 여러 행을 합쳐 1개의 행으로 만드는 'GROUP BY'와는 달리 **기존의 값은 그대로 두고 추가적인 집계 가능**
@@ -1294,9 +1273,6 @@ where DATE_ADD(visited_on, INTERVAL -6 DAY) in (select visited_on from Dist_C)
 order by 1
 ```
 </details><br><br><br>
-
-
-
 
 
 
