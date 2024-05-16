@@ -6,6 +6,10 @@
 
 ## Java 기본 구조
 ``` Java
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
 public class Main {
     public static void main(String[] args) {
         # 자료형
@@ -21,14 +25,11 @@ public class Main {
 > `if 문`
 ``` Java
 # 중괄호 생략 가능!
-if ( 조건식 1) {
-    조건식 1 = True 일 때 수행할 문장;
-} elif ( 조건식 2 ){
-    조건식 1 = False
-    조건식 2 = True 일 때 수행할 문장;
+if ( 조건식 1 && 조건식 2 || 조건식 3) {
+} elif ( 조건식 n ){
+    조건식 n = True 일 때 수행할 문장;
 } else {
-    조건식 1 = 조건식 2 = False
-    거짓일 때 수행할 문장;
+    모두 만족 못 할 때 수행할 문장;
 }
 ```
 <br><br>
@@ -54,8 +55,29 @@ switch ( 실행할 연산 ) {
 <br><br><br>
 
 
-## Java 라이브러리 및 함수
-> `Scanner` (input 함수)
+## Java 클래스 및 함수
+> `println() / printf()` (출력)
+``` Java
+int x = 123;
+int y = 456;
+double a = 3.141592;
+String name = "kimss"
+
+# println() 사용 예시
+System.out.println(n);
+System.out.println("출력값은 " + x + y + "입니다.");   # 변수 여러개 출력 안됨.
+
+# printf() 사용 예시
+System.out.printf("출력값은 %d입니다.", n);
+System.out.printf("printf는 다중 출력(%d %d %.2f %s)이 된다.", x, y, a, name);  # 변수 타입을 출력하고자 하는 순서대로 기입
+
+
+```
+<br><br>
+
+
+
+> `Scanner` (입력)
 ``` Java
 # util 라이브러리 import
 import java.util.Scanner;
