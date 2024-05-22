@@ -26,7 +26,7 @@ public class Main {
 ``` Java
 # 중괄호 생략 가능!
 if ( 조건식 1 && 조건식 2 || 조건식 3) {
-} elif ( 조건식 n ){
+} else if ( 조건식 n ){
     조건식 n = True 일 때 수행할 문장;
 } else {
     모두 만족 못 할 때 수행할 문장;
