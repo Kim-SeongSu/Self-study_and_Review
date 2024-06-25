@@ -13,8 +13,7 @@
    - 특징 <br>
      1. 자바는 모든 코드를 **클래스 단위로 구현**
      2. **main 메소드**를 포함하는 클래스를 가장 먼저 실행
-     3. 클래스는 **틀(frame) 제공** 역할, 데이터는 인스턴스화를 통해 구현
-        
+     3. 클래스는 **틀(frame) 제공** 역할, 데이터는 인스턴스화를 통해 구현<br><br>
    - 구성 <br>
      1. **멤버 변수** - 객체의 `상태, 수치, 특성`을 나타내는 변수
      2. **멤버 메소드** - 객체에서 발생하는 모든 `제어 및 기능, 요청 행위`(함수와 같은 기능?) <br>
@@ -26,8 +25,9 @@
         - **protected**: `자신`과 `하위 클래스`에서만 접근 가능
         - **private**: `자신의 클래스`에서만 접근 가능
 <br>
+<p align="center"><img src="https://github.com/Kim-SeongSu/Self-study_and_Review/assets/104110605/35766fdf-2159-4210-abed-75de37e6539b" width="80%" height="80%"></p>
 
-<details><summary>예시</summary>
+<details><summary>예시 코드</summary>
     
 ```Java
 public class Circle{                            // Circle 클래스 정의 (main 메소드 포함되었으므로 시작 되는 클래스)
@@ -47,9 +47,41 @@ public class Circle{                            // Circle 클래스 정의 (main
 
 ```
 
-</details>
+</details><br><br>
+
+
 
 > Instance (인스턴스)
+
+ - 인스턴스 <br>
+   : 객체 지향 프로그래밍(Object Oriented Programming)에서 `class에 소속`된 개별적인 `객체`
+   -  인스턴스 생성<br>
+     : `새로운 인스턴스를 생성`하여 적절한 타입의 `참조형 변수에 할당`하는 작업<br><br>
+
+<details><summary>예시 코드</summary>
+    
+```Java
+public class Variable {
+ int c;
+ static String d;
+ void func(int c){
+   this.c = c;
+  }
+
+public static void main(String args[]){
+ int a=30;
+ Variable b = new Variable();
+ b.func(a);
+ }
+}
+```
+
+</details><br><br>
+
+
+
+
+
 
 
 > Constructor (생성자 메소드)
