@@ -56,21 +56,38 @@ public class Circle{                            // Circle 클래스 정의 (main
  - 인스턴스 <br>
    : 객체 지향 프로그래밍(Object Oriented Programming)에서 `class에 소속`된 개별적인 `객체`
    -  인스턴스 생성<br>
-     : `새로운 인스턴스를 생성`하여 적절한 타입의 `참조형 변수에 할당`하는 작업<br><br>
+     : **새로운 인스턴스를 생성**하여 적절한 타입의 **참조형 변수에 할당**하는 작업<br>
+     → `new` 키워드와 클래스명을 이용 (인스턴스가 생성되는 동시에 생성자가 호출 됨) <br>
+         예시: `[클래스명] [변수명] = new [클래스명]();` <br>
+     \* 참조형 변수[^1] vs 기본형 변수[^2]
+   - 멤버 변수와 지역 변수 <br>
+     1) 멤버 변수 - `클래스 내부`에 생성된 변수 (**인스턴스 변수**, **클래스 변수**)<br>
+          \* 인스턴스 변수 - 인스턴스마다 독립적으로 존재. 일반적으로 접근 제한해 둠<br>
+          \* 클래스 변수 - 같은 클래스 내부에서 모든 인스턴스가 공유하는 데이터를 클래스 변수에 지정<br>
+              ex) `[접근제한자] static [자료형]    [변수명];`    ( 쉽게 말해 static이 붙으면 클래스 함수! )
+     3) 지역 변수 - `클래스 내부에 있는 메소드 내부`에 생성된 변수<br>
+     
+> [!TIP]
+> 클래스 내부에 새로운 메소드가 생성하면, 해당 구역은 독립된 지역으로 판단한다<br> 이러한 이유로 클래스 내에 같은 이름의 변수 생성이 가능하다! <br>    * 이름이 같을 경우 this 키워드로 구분할 수 있다. 예시) this.변수명[^3] (멤버 변수에 사용)
 
+[^1]: Reference Variable; 주소값(메모리주소)을 저장
+[^2]: Primitive Variable; 값을 저장하는 저장 공간 ex) 10, A, True 등 리터럴(실제값)이 저장됨<br><br>
+[^3]: 외부에서 인스턴스의 멤버(변수 또는 메소드)에 직접 접근하기 위해서는 `객체변수.멤버이름`같은 방법을 통해 접근 가능하다<br>
+
+         
 <details><summary>예시 코드</summary>
     
 ```Java
 public class Variable {
- int c;
- static String d;
- void func(int c){
-   this.c = c;
+ int c;                                     // c: 인스턴스 변수 (멤버 변수)
+ static String d;                           // d: 클래스 변수   (멤버 변수)
+ void func(int c){                          // c: 매개 변수     (지역 변수)
+   this.c = c;                              // 멤버 변수 c에 지역 변수 c값 할당
   }
 
 public static void main(String args[]){
- int a=30;
- Variable b = new Variable();
+ int a=30;                                 // a: 정수형 변수   (지역 변수)
+ Variable b = new Variable();              // b: 참조형 변수   (지역 변수)
  b.func(a);
  }
 }
