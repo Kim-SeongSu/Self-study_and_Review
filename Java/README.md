@@ -79,29 +79,67 @@ public class Circle{                            // Circle 클래스 정의 (main
     
 ```Java
 public class Variable {
- int c;                                     // c: 인스턴스 변수 (멤버 변수)
- static String d;                           // d: 클래스 변수   (멤버 변수)
- void func(int c){                          // c: 매개 변수     (지역 변수)
-   this.c = c;                              // 멤버 변수 c에 지역 변수 c값 할당
-  }
+  int c;                                     // c: 인스턴스 변수 (멤버 변수)
+    static String d;                           // d: 클래스 변수   (멤버 변수)
+    void func(int c){                          // c: 매개 변수     (지역 변수)
+      this.c = c;                              // 멤버 변수 c에 지역 변수 c값 할당
+   }
 
 public static void main(String args[]){
- int a=30;                                 // a: 정수형 변수   (지역 변수)
- Variable b = new Variable();              // b: 참조형 변수   (지역 변수)
- b.func(a);
- }
+  int a=30;                                 // a: 정수형 변수   (지역 변수)
+    Variable b = new Variable();              // b: 참조형 변수   (지역 변수)
+    b.func(a);
+  }
 }
 ```
+</details><br><br>
 
+
+> Constructor (생성자 메소드) <br>
+
+　　: 클래스 내부에 `클래스명과 같은 이름으로 존재`하는 특별한 `메소드`, 인스턴스 생성 시 **멤버변수 및 연관 객체들의 초기화** 작업에 사용
+   -  특징 <br>
+       1. 인스턴스가 생성될 때 자동으로 실행됨 (별도로 실행 불가)
+       2. 리턴문 사용 불가
+       3. 오버로딩[^4] 가능 (메소드라면 모두 가능)
+<br> [^4]: 자바의 한 클래스 내에 이미 사용하려는 이름과 같은 이름을 가진 메소드가 있더라도 매개변수의 개수 또는 타입이 다르면, 같은 이름을 사용해서 메소드를 정의할 수 있다. (단, 리턴값만 다면 오버로딩 불가능)
+
+<details><summary>예시 코드</summary>
+    
+```Java
+class Circle{
+	private double pi = 3.141592;
+  	private double radius;
+
+  	Circle(double radius){								// 실수 인수 전달 시(변수 입력될 때) 수행되는 생성자 메소드1																											
+    	this.radius = radius;
+    	System.out.println( "객체가 생성되었습니다.");
+		}
+
+	Circle(){											// 인수 전달 없을 시 수행되는 생성자 메소드2
+  		this.radius = 3.0
+  		System.out.println("기본 객체가 생성되었습니다.");
+		}
+	}
+
+public class helloWorld{
+	public static void main(String[] args){
+    	Circle c1 new Circle(5.0);						// 인수가 주어졌으므로 생성자 1이 호출됨
+    	Circle c2 = new Circle();						// 인수가 없으므로 생성자 2가 호출됨
+  	}
+}
+
+
+결과 >>
+	객체가 생성되었습니다.
+	기본 객체가 생성되었습니다.
+
+```
 </details><br><br>
 
 
 
 
-
-
-
-> Constructor (생성자 메소드)
 
 ## Java 객체지향 기술
 
