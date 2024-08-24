@@ -1,6 +1,6 @@
 # Github 배운 내용 정리
 
-'''
+```MARKDOWN
 ls             현재 위치한 경로 안의 내용 출력
 pwd            현재 어떤 디렉토리 경로에 있는지를 절대경로로 표시 
 
@@ -35,10 +35,10 @@ q!저장하지 않고 나가기
 
 cat: 셸에서 파일 내용 확인할 때
 clear : 셸 내용 지우기
-'''
+
 
 #커밋 메시지 제목
-'''
+
 feat: 새로운 기능을 추가할 경우
 fix: 버그를 고친 경우
 docs: 문서 수정한 경우
@@ -47,10 +47,10 @@ refactor: 프로덕션 코드 리팩터링
 test: 테스트 추가, 테스트 리팩터링 (프로덕션 코드 변경 없음)
 chore: 빌드 테스크 업데이트, 패키지 매니저 설정할 경우 (프로덕션 코드 변경 없음)
 
-'''
 
 
-'''
+
+
 git clone 주소
 git branch 이름
 git switch branch이름   commit까지 진행후 main으로 복귀
@@ -71,4 +71,4 @@ git remote / git remote -v  origin위치 확인
 
 python ~  잘 실행되나 확인
 git lg
-'''
+```
