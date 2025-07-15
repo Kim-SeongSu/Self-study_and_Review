@@ -1,29 +1,6 @@
 // 정보처리기사 실기 Java 기출문제 //
 
-/* 2025년도 - 1회
-5. 다음은 Java 코드에 대한 문제이다. 아래 코드를 확인하여 알맞는 출력값을 작성하시오.
-
-public class Main {
-  public static void main(String[] args) {
- 
-    int a=5,b=0;
- 
-    try{
-      System.out.print(a/b);
-    }catch(ArithmeticException e){
-      System.out.print("출력1");
-    }catch(ArrayIndexOutOfBoundsException e) {
-      System.out.print("출력2");
-    }catch(NumberFormatException e) {
-      System.out.print("출력3");
-    }catch(Exception e){
-      System.out.print("출력4");
-    }finally{
-      System.out.print("출력5");
-    }
-  }
-}
-
+/* 2025년도 - 1회 5
 
 개념)
 Exception e - 자바의 모든 일반적인 예외의 최상위 클래스 (모든 예외를 포괄적으로 처리)
@@ -62,44 +39,7 @@ public class Main {
 
 ~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~ */
 
-/* 2025년도 - 1회
-13. 다음은 Java 코드에 대한 문제이다. 아래 코드를 확인하여 알맞는 출력값을 작성하시오.
-
-public class Main {
-    public static void main(String[] args) {
-        new Child();
-        System.out.println(Parent.total);
-    }
-}
- 
-class Parent {
-    static int total = 0;
-    int v = 1;
- 
-    public Parent() {
-        total += (++v);
-        show();    
-    }
- 
-    public void show() {
-        total += total;
-    }
-}
- 
-class Child extends Parent {
-    int v = 10;
- 
-    public Child() {
-        v += 2;
-        total += v++;
-        show();
-    }
- 
-    @Override
-    public void show() {
-        total += total * 2;
-    }
-}
+/* 2025년도 - 1회 13
 
 개념)
 extends (상속): Child 클래스 호출 시, Parent 클래스 상속
@@ -156,23 +96,7 @@ class Child extends Parent {                    // 2. Child: Parent 클래스 �
 ~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~ */
 
 
-/* 2025년도 - 1회
-16. 다음은 Java 코드에 대한 문제이다. 아래 코드를 확인하여 알맞는 출력값을 작성하시오.
-
-public class Main {
-    public static void main(String[] args) {
-        int[] data = {3, 5, 8, 12, 17};
-        System.out.println(func(data, 0, data.length - 1));
-    }
- 
-    static int func(int[] a, int st, int end) {
-        if (st >= end) return 0;
-        int mid = (st + end) / 2;
-        return a[mid] + Math.max(func(a, st, mid), func(a, mid + 1, end));
-    } 
-}
-
-개념)
+/* 2025년도 - 1회 16
 
 */
 
@@ -225,5 +149,93 @@ func(data, 0, 4)
 
 ~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~ */
 
+/* 2025년도 - 1회 20
+
+개념)
+
+*/
+
+// 풀이)
+public class Main {
+  public static void main(String[] args) {
+    System.out.println(calc("5"));
+  }
+ 
+  static int calc(int value) {        // calc(정수형): value가 1보다 작을 때까지 calc(value - 1) + calc(value - 2) 실행
+    if (value <= 1) return value;
+    return calc(value - 1) + calc(value - 2);
+  }
+ 
+  static int calc(String str) {       // calc(문자열): int로 변환 후 value가 1보다 작을 때까지 calc(value - 1) + calc(value - 3) 실행
+    int value = Integer.valueOf(str);
+    if (value <= 1) return value;
+    return calc(value - 1) + calc(value - 3);
+  }
+}
 
 
+/*
+calc("5")
+  = calc(4) + calc(2)
+  = calc(3) + calc(2) + calc(1) + calc(0)
+  = calc(2) + calc(1) + calc(1) + calc(0) + 1
+  = calc(1) + calc(0) + 2 + 1
+  = 1 + 2 + 1
+  = 4
+
+*/
+
+
+/* 정답) 
+4
+~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~ */
+
+/* 2024년도 - 3회 1
+
+개념)
+1. equals VS ==
+equals()는 문자열 내용이 같은지를 비교
+==는 두 참조(객체 주소)가 같은지를 비교
+*/
+
+// 풀이)
+public class Main{
+  static String[] s = new String[3];  // s = {null, null, null} 
+ 
+  static void func(String[] s, int size){
+    for(int i=1; i<size; i++){
+      if(s[i-1].equals(s[i])){    // s[0].equals(s[1])  >> "A".equals("A")             : "O" .equals()는 단순히 같은 문자열인지 비교
+        System.out.print("O");    // s[1].equals(s[2])  >> "A".equals(new String("A")) : "O"
+      }else{                      
+        System.out.print("N");
+      }
+    }
+      for (String m : s){         // 문자열 s 출력    s = {"A", "A", "A"} 
+        System.out.print(m);
+      }
+    }
+  
+ 
+  public static void main(String[] args){
+    s[0] = "A";
+    s[1] = "A";
+    s[2] = new String("A");     // s = {"A", "A", "A"} 
+ 
+    func(s, 3);
+  }
+}
+
+/* 정답) 
+OOAAA
+~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~ */
+/* 2024년도 - 1회 
+
+개념)
+
+*/
+
+// 풀이)
+
+/* 정답) 
+
+~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~ */

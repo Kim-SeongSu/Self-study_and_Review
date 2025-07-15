@@ -1,7 +1,6 @@
 /* 정보처리기사 실기 SQL 기출문제 */
 
-/* 2025년도 - 1회
-7. 다음은 SQL 문제이다. 아래 두 테이블을 참고하여 보기에 쿼리 실행 결과를 작성하시오.
+/* 2025년도 - 1회 7
 
 [emp 테이블]              [sal 테이블]
 +------+-------+         +------+------------+
@@ -26,4 +25,55 @@ SELECT name, incentive FROM emp, sal WHERE emp.id = sal.id and incentives >= 500
 +---------+------------+
 
 ~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~ */
+/* 2024년도 - 3회 3
 
+[employee 테이블]                                      [project 테이블]
++----+------------+-----------+------------+          +------------+-------+
+| no | first_name | last_name | project_id |          | project_id | name  |
++----+------------+-----------+------------+          +------------+-------+
+| 1  |    Jhon    |    Doe    |     10     |          |     10     | Alpha |
+| 2  |    Jim     |   Carry   |     20     |          |     20     | Beta  |
+| 3  |   Rachel   |  Redmond  |     10     |          |     10     | Gamma |
++----+------------+------------+-----------+          +------------+-------+
+*/
+
+SELECT count(*) 
+FROM employee AS e JOIN project AS p ON e.project_id = p.project_id                 -- 1) e.project_id = p.project_id 기준으로 두 테이블 join 하여 모든 결과 수 count
+WHERE p.name IN (                                                                   -- 4) 의 name이 포함된 값
+    SELECT name FROM project p WHERE p.project_id IN (                              -- 3) 과 같은 project_id를 갖는 project 테이블 name 값  >> name: Beta
+        SELECT project_id FROM employee GROUP BY project_id HAVING count(*) < 2)    -- 2) employee 테이블의 project_id 기준으로 개수가 2개 보다 작은 값들의 project_id  >> project_id: 20
+);     
+
+/*
+[project join employee 테이블]
++----+------------+-----------+------------+-------+
+| no | first_name | last_name | project_id | name  |
++----+------------+-----------+------------+-------+
+| 1  |    Jhon    |    Doe    |     10     | Alpha |
+| 1  |    Jhon    |    Doe    |     10     | Gamma |
+| 2  |    Jim     |   Carry   |     20     | Beta  |      ( V )
+| 3  |   Rachel   |  Redmond  |     10     | Alpha |
+| 3  |   Rachel   |  Redmond  |     10     | Gamma |
++----+------------+------------+-----------+-------+
+*/
+
+
+/* 정답)
+1
+~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~ */
+
+
+
+/* 2024년도 - 회 
+
+*/
+
+
+/* 정답)
++---------+------------+
+|         |            |  
++---------+------------+
+|         |            |
++---------+------------+
+
+~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~.~ */
